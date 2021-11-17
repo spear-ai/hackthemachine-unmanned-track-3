@@ -1,0 +1,15 @@
+{
+	"extensions": {
+		"recommendations": [],
+		"unwantedRecommendations": []
+	},
+	"folders": [
+		{ "path": ".", "name": "hackthemachine-unmanned-track-3" }
+	],
+	"settings": {
+		"editor.autoClosingQuotes": "always",
+		"editor.quickSuggestions": {
+    	"strings": true
+		}
+	}
+}
