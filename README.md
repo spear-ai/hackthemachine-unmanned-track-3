@@ -29,8 +29,8 @@ It's build is output in the `./docs` directory and hosted using GitHub Pages.
   <img src="https://avatars.githubusercontent.com/u/32316343" title="Jackson Koehler" width="80" height="80">
 </a>
 
-<a href="https://github.com/">
-  <img src="https://avatars.githubusercontent.com/u/" title="Jaim Coddington" width="80" height="80">
+<a href="https://github.com/JaimCoddington">
+  <img src="https://avatars.githubusercontent.com/u/94637237" title="Jaim Coddington" width="80" height="80">
 </a>
 
 <a href="https://github.com/jobeid1">
