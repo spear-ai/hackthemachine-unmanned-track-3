@@ -7,7 +7,7 @@ Add things
 
 ## Contributors
 
-<a href="https://www.spear.ai">
+<a href="https://github.com/spear-ai">
   <img src="https://avatars.githubusercontent.com/u/89326455" title="Spear AI" width="80" height="80">
 </a>
 
@@ -31,8 +31,8 @@ Add things
   <img src="https://avatars.githubusercontent.com/u/" title="Jaim Coddington" width="80" height="80">
 </a>
 
-<a href="https://github.com/">
-  <img src="https://avatars.githubusercontent.com/u/" title="Joseph Obeid" width="80" height="80">
+<a href="https://github.com/jobeid1">
+  <img src="https://avatars.githubusercontent.com/u/80070004" title="Joseph Obeid" width="80" height="80">
 </a>
 
 <a href="https://github.com/kevinrosa">
