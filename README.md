@@ -2,8 +2,10 @@
 
 See the mission description at [HACKtheMACHINE: Unmanned Track 3](https://www.hackthemachine.ai/track3).
 
-TODO:
-Add things
+## Website
+
+The website’s source code and README is located in the `./site` directory.
+It's build is output in the `./docs` directory and hosted using GitHub Pages.
 
 ## Contributors
 
