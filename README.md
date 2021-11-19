@@ -21,10 +21,6 @@ It's build is output in the `./docs` directory and hosted using GitHub Pages.
   <img src="https://avatars.githubusercontent.com/u/89326455" title="Spear AI" width="80" height="80">
 </a>
 
-<a href="https://github.com/">
-  <img src="https://avatars.githubusercontent.com/u/" title="Chris Norton" width="80" height="80">
-</a>
-
 <a href="https://github.com/psirenny">
   <img src="https://avatars.githubusercontent.com/u/463178" title="Dennis Torres" width="80" height="80">
 </a>
