@@ -9,12 +9,16 @@ It's build is output in the `./docs` directory and hosted using GitHub Pages.
 
 ## Contributors
 
-<a href="https://github.com/spear-ai">
-  <img src="https://avatars.githubusercontent.com/u/89326455" title="Spear AI" width="80" height="80">
+<a href="https://www.compositeenergytechnologies.com/">
+  <img src="" title="Composite Energy Technologies" width="80" height="80">
 </a>
 
 <a href="https://www.current-lab.com">
   <img src="https://avatars.githubusercontent.com/u/77344091" title="Current Lab" width="80" height="80">
+</a>
+
+<a href="https://github.com/spear-ai">
+  <img src="https://avatars.githubusercontent.com/u/89326455" title="Spear AI" width="80" height="80">
 </a>
 
 <a href="https://github.com/">
