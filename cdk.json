@@ -1,0 +1,75 @@
+{
+  "app": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/stacks/app.binary.ts --extension ts",
+  "context": {
+    "@aws-cdk/aws-apigateway:usagePlanKeyOrderInsensitiveId": true,
+    "@aws-cdk/aws-cloudfront:defaultSecurityPolicyTLSv1.2_2021": true,
+    "@aws-cdk/aws-ecr-assets:dockerIgnoreSupport": true,
+    "@aws-cdk/aws-ecs-patterns:removeDefaultDesiredCount": true,
+    "@aws-cdk/aws-efs:defaultEncryptionAtRest": true,
+    "@aws-cdk/aws-kms:defaultKeyPolicies": true,
+    "@aws-cdk/aws-lambda:recognizeVersionProps": true,
+    "@aws-cdk/aws-rds:lowercaseDbIdentifier": true,
+    "@aws-cdk/aws-s3:grantWriteWithoutAcl": true,
+    "@aws-cdk/aws-secretsmanager:parseOwnedSecretName": true,
+    "@aws-cdk/core:enableStackNameDuplicates": true,
+    "@aws-cdk/core:stackRelativeExports": true,
+    "aws-cdk:enableDiffNoFail": true,
+    "environments": {
+      "production": {
+        "account": "102113115407",
+        "isSandbox": false,
+        "region": "us-east-1"
+      },
+      "user-alnickel": {
+        "account": "397298956255",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-amaksimovich": {
+        "account": "357396200470",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-atippl": {
+        "account": "652618291727",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-ccanniff": {
+        "account": "183715416528",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-dtorres": {
+        "account": "163069659287",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-jcoddington": {
+        "account": "812896896338",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-jkoehler": {
+        "account": "205250825924",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-jobeid": {
+        "account": "112772318011",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-krosa": {
+        "account": "015792230380",
+        "isSandbox": true,
+        "region": "us-east-1"
+      },
+      "user-mhunter": {
+        "account": "300444429350",
+        "isSandbox": true,
+        "region": "us-east-1"
+      }
+    }
+  }
+}

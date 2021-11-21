@@ -1,0 +1,10 @@
+{
+  "build": {
+    "args": {
+      "vscode": "true"
+    },
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "runArgs": ["--env-file", ".env"]
+}

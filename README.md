@@ -2,10 +2,31 @@
 
 See the mission description at [HACKtheMACHINE: Unmanned Track 3](https://www.hackthemachine.ai/track3).
 
+# Requirements
+
+It's recommended to use VSCode. A dev environment has already configured to run in VSCode terminal.
+
+Add a `.env` file to the project with your AWS credentials:
+
+```env
+AWS_ACCESS_KEY_ID=…
+AWS_SECRET_ACCESS_KEY=…
+CDK_DEFAULT_ACCOUNT_NAME=…
+```
+
+If you prefer another editor then checkout `.devcontainer/Dockerfile` for instructions on setting up a dev environment.
+
+# Installation
+
+```sh
+yarn install
+poetry install
+```
+
 ## Website
 
 The website’s source code and README is located in the `./site` directory.
-It's build is output in the `./docs` directory and hosted using GitHub Pages.
+It's build is output to the `./docs` directory and hosted using GitHub Pages.
 
 ## Contributors
 

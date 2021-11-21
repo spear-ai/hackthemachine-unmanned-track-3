@@ -1,0 +1,6 @@
+*.swp
+.cdk.staging
+.env
+.envrc
+cdk.out
+node_modules
