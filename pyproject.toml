@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "hackthemachine-unmanned-track-3"
+version = "1.0.0"
+description = "HACKtheMACHINE: Unmanned Track 3"
+authors = [
+  "Alex Nickel <alnickel+htmu-user@amazon.com>",
+  "Amy Tippl <attippl+htmu-user@amazon.com>",
+  "Andrew Maksimovich <andrewma+htmu-user@amazon.com>",
+  "Chris Canniff <ccanniff1+htmu-user@gmail.com>",
+  "Dennis Torres <dtorres+htmu-user@spear.ai>",
+  "Jackson Koehler <jackson.koehler+htmu-user@usacet.com>",
+  "Jaim Coddington <jcoddington+htmu-user@spear.ai>",
+  "Joseph Obeid <jobeid+htmu-user2@spear.ai>",
+  "Kevin Rosa <kevin+htmu-user@current-lab.com>",
+  "Michael Hunter <mhunter+htmu-user@spear.ai>"
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+neural-mmo = "^1.5.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "6.2.5"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

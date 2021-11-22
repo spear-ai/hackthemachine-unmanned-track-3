@@ -1,7 +1,7 @@
 {
   "name": "@spear-ai/hackthemachine-unmanned-track-3-site",
-  "description": "HACKtheMACHINE: Unmanned Track 3 website",
   "version": "1.0.0",
+  "description": "HACKtheMACHINE: Unmanned Track 3 website",
   "homepage": "https://htmu.spear.ai",
   "private": true,
   "dependencies": {
