@@ -18,10 +18,45 @@ If you prefer another editor then checkout `.devcontainer/Dockerfile` for instru
 
 # Installation
 
+Install Node.js dependencies:
+
 ```sh
 yarn install
+```
+
+Install Python dependencies:
+
+```sh
 poetry install
 ```
+
+# CDK (infrastructure)
+
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
+
+If this is the first time a CDK project has been deployed to this particular account, run:
+
+```
+yarn cdk bootstrap
+```
+
+At this point you can now synthesize the CloudFormation template for this code.
+
+```
+yarn cdk synth
+```
+
+To add additional dependencies, for example other CDK libraries, just add
+them to your `package.json` file and rerun the `yarn install` command.
+
+## Useful commands
+
+- `yarn cdk ls`          list all stacks in the app
+- `yarn cdk synth`       emits the synthesized CloudFormation template
+- `yarn cdk deploy`      deploy this stack to your default AWS account/region
+- `yarn cdk diff`        compare deployed stack with current state
+- `yarn cdk docs`        open CDK documentation
+- `yarn cdk destroy`     destroy stack
 
 ## Website
 
