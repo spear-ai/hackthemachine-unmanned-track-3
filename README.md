@@ -4,14 +4,14 @@ See the mission description at [HACKtheMACHINE: Unmanned Track 3](https://www.ha
 
 # Requirements
 
-It's recommended to use VSCode. A dev environment has already configured to run in VSCode terminal.
+It's recommended to use VSCode. A dev environment is already configured to run in VSCode terminal.
 
 Add a `.env` file to the project with your AWS credentials:
 
 ```env
 AWS_ACCESS_KEY_ID=…
 AWS_SECRET_ACCESS_KEY=…
-CDK_DEFAULT_ACCOUNT_NAME=…
+CDK_DEFAULT_ENV_NAME=user-…
 ```
 
 If you prefer another editor then checkout `.devcontainer/Dockerfile` for instructions on setting up a dev environment.
