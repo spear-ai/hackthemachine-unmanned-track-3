@@ -30,6 +30,11 @@ Install Python dependencies:
 poetry install
 ```
 
+# Model
+
+Add a `.wandb_api_key` to the root of the project.
+You can get an API key at [Weights & Biases](https://wandb.ai/site).
+
 # CDK (infrastructure)
 
 The `cdk.json` file tells the CDK Toolkit how to execute your app.

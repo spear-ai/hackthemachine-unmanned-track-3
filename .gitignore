@@ -2,5 +2,7 @@
 .cdk.staging
 .env
 .envrc
+.wandb_api_key
+__pycache__
 cdk.out
 node_modules

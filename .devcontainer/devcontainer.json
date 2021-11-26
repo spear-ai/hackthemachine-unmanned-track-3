@@ -6,5 +6,26 @@
     "context": "..",
     "dockerfile": "Dockerfile"
   },
-  "runArgs": ["--env-file", ".env"]
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-azuretools.vscode-docker",
+    "sleistner.vscode-fileutils",
+    "tyriar.sort-lines"
+  ],
+  "runArgs": [
+    "--env-file",
+    ".env",
+    "--shm-size",
+    "8gb"
+  ],
+  "settings": {
+    "[python]": {
+      "editor.insertSpaces": true,
+      "editor.tabSize": 4
+    },
+    "editor.formatOnSave": true,
+    "python.linting.enabled": true,
+    "python.linting.flake8Enabled": true
+  }
 }
