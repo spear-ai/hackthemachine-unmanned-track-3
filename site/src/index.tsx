@@ -4,7 +4,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import store from './store';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
 
 Sentry.init({
   dsn: 'https://0fb10f6d1639435292f149f01599bb0b@o1067260.ingest.sentry.io/6070809',
@@ -17,7 +19,9 @@ Sentry.init({
 ReactDOM.render(
   <React.StrictMode>
     <Sentry.ErrorBoundary showDialog>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </Sentry.ErrorBoundary>
   </React.StrictMode>,
   document.getElementById('root')
