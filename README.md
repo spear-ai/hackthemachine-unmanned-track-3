@@ -70,7 +70,7 @@ It's build is output to the `./docs` directory and hosted using GitHub Pages.
 </a>
 
 <a href="https://www.current-lab.com">
-  <img src="https://avatars.githubusercontent.com/u/77344091" title="Current Lab" width="80" height="80">
+  <img src="https://i.imgur.com/shj7hNd.png" title="Current Lab" width="80" height="80">
 </a>
 
 <a href="https://github.com/spear-ai">
