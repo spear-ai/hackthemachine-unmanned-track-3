@@ -28,12 +28,8 @@ Install Python dependencies:
 
 ```sh
 poetry install
+poetry run python model/server/ray/patch.py
 ```
-
-# Model
-
-Add a `.wandb_api_key` to the root of the project.
-You can get an API key at [Weights & Biases](https://wandb.ai/site).
 
 # CDK (infrastructure)
 
@@ -62,6 +58,18 @@ them to your `package.json` file and rerun the `yarn install` command.
 - `yarn cdk diff`        compare deployed stack with current state
 - `yarn cdk docs`        open CDK documentation
 - `yarn cdk destroy`     destroy stack
+
+# Model
+
+Add a `.wandb_api_key` to the root of the project.
+You can register an API key at [Weights & Biases](https://wandb.ai/site).
+
+### Commands
+
+Commands are stored in the scripts section of `./package.json`:
+
+- `yarn model:environment:generate` Generate model environments
+- `yarn model:train`                Train model
 
 ## Website
 

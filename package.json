@@ -4,12 +4,12 @@
   "description": "HACKtheMACHINE: Unmanned Track 3",
   "scripts": {
     "cdk": "cdk",
-    "create-sagemaker-algorithm": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/create-sagemaker-algorithm.ts --extension ts",
-    "describe-sagemaker-algorithm": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/describe-sagemaker-algorithm.ts --extension ts",
-    "lint": "poetry run flake8",
-    "model:generate-maps": "poetry run model/server/Forge.py generate --config=CompetitionRound1",
-    "model:train": "poetry run python model/server/Forge.py train --config=CompetitionRound1 --RESTORE=None",
-    "test:python": "poetry run pytest"
+    "lint:python": "poetry run flake8",
+    "model:environment:generate": "poetry run python model/environment/scripts/generate.py",
+    "model:train": "poetry run python model/server/Forge.py train --config=EastPacificOcean",
+    "patch:python:ray": "poetry run model/server/ray/patch.py",
+    "sagemaker:algorithm:create": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/create-sagemaker-algorithm.ts --extension ts",
+    "sagemaker:algorithm:describe": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/describe-sagemaker-algorithm.ts --extension ts"
   },
   "dependencies": {
     "@aws-cdk/core": "1.132.0",

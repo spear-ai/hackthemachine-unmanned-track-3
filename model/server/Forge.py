@@ -40,7 +40,7 @@ def run_tune_experiment(config):
 
     ray.init(local_mode=config.LOCAL_MODE)
 
-    #Obs and actions
+    # Obs and actions
     obs = wrapper.observationSpace(config)
     atns = wrapper.actionSpace(config)
 
@@ -68,18 +68,7 @@ def run_tune_experiment(config):
 
     # Create rllib config
     rllib_config = {
-        'num_workers': config.NUM_WORKERS,
-        'num_gpus_per_worker': config.NUM_GPUS_PER_WORKER,
-        'num_gpus': config.NUM_GPUS,
-        'num_envs_per_worker': 1,
-        'train_batch_size': config.TRAIN_BATCH_SIZE,
-        'rollout_fragment_length': config.ROLLOUT_FRAGMENT_LENGTH,
-        'sgd_minibatch_size': config.SGD_MINIBATCH_SIZE,
-        'num_sgd_iter': config.NUM_SGD_ITER,
-        'framework': 'torch',
-        'horizon': np.inf,
-        'soft_horizon': False,
-        'no_done_at_end': False,
+        'callbacks': wrapper.RLlibLogCallbacks,
         'env': 'Neural_MMO',
         'env_config': {
             'config': config
@@ -89,22 +78,33 @@ def run_tune_experiment(config):
                 'config': eval_config
             },
         },
-        'multiagent': {
-            'policies': policies,
-            'policy_mapping_fn': mapPolicy,
-            'count_steps_by': 'agent_steps'
-        },
+        'evaluation_interval': config.EVALUATION_INTERVAL,
+        'evaluation_num_episodes': config.EVALUATION_NUM_EPISODES,
+        'evaluation_num_workers': config.EVALUATION_NUM_WORKERS,
+        'evaluation_parallel_to_training': config.EVALUATION_PARALLEL,
+        'framework': 'torch',
+        'horizon': np.inf,
         'model': {
             'custom_model': 'godsword',
             'custom_model_config': {'config': config},
             'max_seq_len': config.LSTM_BPTT_HORIZON
         },
+        'multiagent': {
+            'policies': policies,
+            'policy_mapping_fn': mapPolicy,
+            'count_steps_by': 'agent_steps'
+        },
+        'no_done_at_end': False,
+        'num_envs_per_worker': 1,
+        'num_gpus': config.NUM_GPUS,
+        'num_gpus_per_worker': config.NUM_GPUS_PER_WORKER,
+        'num_sgd_iter': config.NUM_SGD_ITER,
+        'num_workers': config.NUM_WORKERS,
         'render_env': config.RENDER,
-        'callbacks': wrapper.RLlibLogCallbacks,
-        'evaluation_interval': config.EVALUATION_INTERVAL,
-        'evaluation_num_episodes': config.EVALUATION_NUM_EPISODES,
-        'evaluation_num_workers': config.EVALUATION_NUM_WORKERS,
-        'evaluation_parallel_to_training': config.EVALUATION_PARALLEL,
+        'rollout_fragment_length': config.ROLLOUT_FRAGMENT_LENGTH,
+        'sgd_minibatch_size': config.SGD_MINIBATCH_SIZE,
+        'soft_horizon': False,
+        'train_batch_size': config.TRAIN_BATCH_SIZE
     }
 
     tune.run(wrapper.RLlibTrainer,
@@ -121,7 +121,6 @@ def run_tune_experiment(config):
                  __file__,
                  '../experiments'
              )),
-             # local_dir='experiments',
              name=config.__class__.__name__,
              progress_reporter=ConsoleLog(),
              restore=config.RESTORE,
@@ -142,7 +141,7 @@ class Anvil():
        python Forge.py <COMMAND> --config=<CONFIG> --ARG1=<ARG1> ...
 
     The User API documents core env flags. Additional config options specific
-    to this demo are available in projekt/config.py. 
+    to this demo are available in projekt/config.py.
 
     The --config flag may be used to load an entire group of options at once.
     Select one of the defaults from projekt/config.py or write your own.
@@ -198,3 +197,4 @@ if __name__ == '__main__':
     from fire import core
     core.Display = Display
     Fire(Anvil)
+    print('here')

@@ -152,8 +152,32 @@ def generate_model_environments(
 
     for map_size in map_size_list:
         map = create_map(map_size)
-        data = {'map': map, 'map_tiles': map_tiles}
         environment_dir = os.path.join(output, f'{map_size}x{map_size}')
+
+        # A list of northern and southern ports that can be used to
+        # create start/end points for vessels.
+        northern_port_list = []
+        southern_port_list = []
+
+        for i in range(1, map_size // 2):
+            for j in range(1, map_size - 1):
+                x = j
+
+                # If a northern water tile has land above or to the right, then it's a port
+                y = i
+                if not map[y][x]['is_land']:
+                    if map[y - 1][x]['is_land']:
+                        northern_port_list.append([x, y])
+                    elif map[y][x + 1]['is_land']:
+                        northern_port_list.append([x, y])
+
+                # If a southern water tile has land below or to the right, then it's a port
+                y = map_size - i - 1
+                if not map[y][x]['is_land']:
+                    if map[y + 1][x]['is_land']:
+                        southern_port_list.append([x, y])
+                    elif map[y][x + 1]['is_land']:
+                        southern_port_list.append([x, y])
 
         # Encode map to numpy arrays
         encoded_map = np.empty(shape=(map_size, map_size))
@@ -188,6 +212,14 @@ def generate_model_environments(
             for tile_row in encoded_map
         ]
         thumbnail = np.vstack([np.hstack(tile) for tile in thumbnail])
+
+        # Create environment JSON data
+        data = {
+            'map': map,
+            'map_tiles': map_tiles,
+            'northern_port_list': northern_port_list,
+            'southern_port_list': southern_port_list
+        }
 
         # Ensure the environment directory exists
         Path(environment_dir).mkdir(exist_ok=True, parents=True)
