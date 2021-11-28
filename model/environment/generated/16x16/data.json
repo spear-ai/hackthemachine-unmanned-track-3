@@ -1,0 +1,881 @@
+{
+  "map": [
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ]
+  ],
+  "map_tiles": {
+    "border": 0,
+    "land": 2,
+    "water": 1
+  },
+  "northern_port_list": [
+    [
+      6,
+      1
+    ],
+    [
+      7,
+      2
+    ],
+    [
+      8,
+      2
+    ],
+    [
+      9,
+      3
+    ],
+    [
+      10,
+      4
+    ],
+    [
+      11,
+      5
+    ],
+    [
+      12,
+      6
+    ],
+    [
+      13,
+      7
+    ]
+  ],
+  "southern_port_list": [
+    [
+      9,
+      14
+    ],
+    [
+      10,
+      13
+    ],
+    [
+      11,
+      13
+    ],
+    [
+      12,
+      12
+    ],
+    [
+      13,
+      11
+    ],
+    [
+      14,
+      10
+    ],
+    [
+      5,
+      9
+    ],
+    [
+      5,
+      8
+    ],
+    [
+      14,
+      8
+    ]
+  ]
+}

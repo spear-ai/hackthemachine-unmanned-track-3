@@ -3,14 +3,24 @@
   "version": "1.0.0",
   "description": "HACKtheMACHINE: Unmanned Track 3",
   "scripts": {
-    "cdk": "cdk"
+    "cdk": "cdk",
+    "lint:python": "poetry run flake8",
+    "model:environment:generate": "poetry run python model/environment/scripts/generate.py",
+    "model:train": "poetry run python model/server/Forge.py train --config=EastPacificOcean",
+    "patch:python:ray": "poetry run model/server/ray/patch.py",
+    "sagemaker:algorithm:create": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/create-sagemaker-algorithm.ts --extension ts",
+    "sagemaker:algorithm:describe": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/describe-sagemaker-algorithm.ts --extension ts"
   },
   "dependencies": {
     "@aws-cdk/core": "1.132.0",
+    "@aws-cdk/aws-ec2": "1.132.0",
     "@aws-cdk/aws-iam": "1.132.0",
     "@aws-cdk/aws-sagemaker": "1.132.0",
+    "@aws-cdk/aws-stepfunctions": "1.132.0",
+    "@aws-cdk/aws-stepfunctions-tasks": "1.132.0",
     "@aws-cdk/aws-s3": "1.132.0",
     "aws-cdk": "1.132.0",
+    "aws-sdk": "2.1036.0",
     "husky": "7.0.4",
     "ts-invariant": "0.9.3",
     "ts-node": "10.4.0",

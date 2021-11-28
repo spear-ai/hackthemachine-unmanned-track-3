@@ -1,0 +1,310 @@
+{
+  "map": [
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ]
+  ],
+  "map_tiles": {
+    "border": 0,
+    "land": 2,
+    "water": 1
+  },
+  "northern_port_list": [
+    [
+      3,
+      1
+    ],
+    [
+      4,
+      2
+    ],
+    [
+      5,
+      2
+    ],
+    [
+      6,
+      3
+    ]
+  ],
+  "southern_port_list": [
+    [
+      4,
+      7
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      2,
+      5
+    ],
+    [
+      7,
+      5
+    ]
+  ]
+}
