@@ -11,6 +11,9 @@ SHELL ["bin/bash", "-l", "-c"]
 # Set home directory
 ENV HOME "/root"
 
+# Update apt-get
+RUN apt-get update && apt-get upgrade
+
 # Install NVM (node version manager)
 RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
 
@@ -43,3 +46,9 @@ RUN \
   apt-get upgrade && \
   apt-get install -y python3-dev tk-dev && \
   curl -sSL https://install.python-poetry.org | python3
+
+# Install Pip globally for VSCode extensions
+RUN \
+  apt-get update && \
+  apt-get upgrade && \
+  apt-get install -y python3-pip

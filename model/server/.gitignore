@@ -1,0 +1,12 @@
+*.pth
+*.pyc
+*.swo
+*.swp
+.idea
+/build
+baselines/models/current/*
+experiments
+maps
+neural_mmo.egg-info
+neural_mmo/forge/embyr
+wandb

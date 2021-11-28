@@ -1,0 +1,270 @@
+{
+  "map": [
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ],
+    [
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": false
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      },
+      {
+        "is_land": true
+      }
+    ]
+  ],
+  "map_tiles": {
+    "border": 0,
+    "land": 2,
+    "water": 1
+  }
+}
