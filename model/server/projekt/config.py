@@ -122,15 +122,12 @@ class DefaultConfig(core.Config, RLlibConfig, PathsConfig, core.config.AllGameSy
 
     # Assume maps are generated with a border of size 1.
     # Are there ramifications to changing the default border size?
-    TERRAIN_BORDER = 1
+    TERRAIN_BORDER = 16
 
-    # Arbitrarily set map size to 16.
+    # Arbitrarily set map size to 16 (including border).
     # This will be overriden by `Forge.py` at run time anyway.
-    TERRAIN_SIZE = 16
-
-    # This setting alters default neural-mmo spawn behavior.
-    # We need to ignore default spawn behavior anyway, so this should have no effect.
-    TERRAIN_CENTER = TERRAIN_SIZE / 2
+    TERRAIN_CENTER = 128
+    TERRAIN_SIZE = TERRAIN_CENTER + (2 * TERRAIN_BORDER)
 
     # The number of maps to train and evaluate on.
     TERRAIN_EVAL_MAPS = 0
@@ -150,11 +147,10 @@ class DefaultConfig(core.Config, RLlibConfig, PathsConfig, core.config.AllGameSy
     # Agents spawned per tick
     PLAYER_SPAWN_ATTEMPTS = 24
 
-    # The number of entitites. I think this used to enable multiple entities to co-exist on a tile.
+    # The number of entitites. I think multiple entities used to be able to co-exist on a tile.
     # Perhaps there's a way to bring that behavior back?
     NENT = 1
-
-    NMOB = 1
+    NPOP = 1
 
 
 class EastPacificOcean(DefaultConfig):
