@@ -82,26 +82,12 @@ class Meta(type):
 
 
 class All(metaclass=Meta):
-    # For now, treat `Water` as the ocean and `Grass` as land.
-    # We should refactor all of the materials once we get things working.
-    #
-    # Ideas:
-    # * Rename `Lava` -> `Border`
-    # * Rename `Grass` -> `Land`
-    # * Remove `Scrub`, `Forest`, `Stone`, and `Orerock`
-    # * Remove or re-work resource harvesting of the tiles
     materials = {Lava, Water, Grass, Scrub, Forest, Stone, Orerock}
 
 
 class Impassible(metaclass=Meta):
-    # materials = {Lava, Stone, Orerock} (neural-mmo default)
-
-    # Make land impassible for now. We'll need to reconsider this for aerial agents.
-    materials = {Grass}
+    materials = {Lava, Stone, Orerock}
 
 
 class Habitable(metaclass=Meta):
-    # materials = {Grass, Scrub, Forest} (neural-mmo default)
-
-    # Make water habitable.
-    materials = {Water}
+    materials = {Grass, Scrub, Forest}
