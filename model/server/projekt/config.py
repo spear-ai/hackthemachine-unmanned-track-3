@@ -161,7 +161,7 @@ class EastPacificOcean(DefaultConfig):
     pass
 
 
-class LargeMaps(core.Config, RLlibConfig, core.config.AllGameSystems):
+class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
     '''Large scale Neural MMO training setting
     Features up to 1000 concurrent agents and 1000 concurrent NPCs,
     1km x 1km maps, and 5/10k timestep train/eval horizons

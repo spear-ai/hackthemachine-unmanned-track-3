@@ -18,12 +18,7 @@ from ray import rllib, tune
 from ray.tune import CLIReporter
 from ray.tune.integration.wandb import WandbLoggerCallback
 from projekt import rllib_wrapper as wrapper
-
-import projekt
 from projekt import config as base_config
-
-from neural_mmo.forge.blade.io.action.static import Action
-from neural_mmo.forge.ethyr.torch import utils
 
 
 class ConsoleLog(CLIReporter):
@@ -45,7 +40,7 @@ def run_tune_experiment(config):
     atns = wrapper.actionSpace(config)
 
     # Register custom env and policies
-    ray.tune.registry.register_env("Neural_MMO",
+    ray.tune.registry.register_env('HACKtheMACHINE',
                                    lambda config: wrapper.RLlibEnv(config))
     rllib.models.ModelCatalog.register_custom_model(
         'godsword', wrapper.RLlibPolicy)
@@ -69,7 +64,7 @@ def run_tune_experiment(config):
     # Create rllib config
     rllib_config = {
         'callbacks': wrapper.RLlibLogCallbacks,
-        'env': 'Neural_MMO',
+        'env': 'HACKtheMACHINE',
         'env_config': {
             'config': config
         },
@@ -111,7 +106,7 @@ def run_tune_experiment(config):
              callbacks=[WandbLoggerCallback(
                  api_key_file='.wandb_api_key',
                  log_config=False,
-                 project='NeuralMMO'
+                 project='HACKtheMACHINE'
              )],
              checkpoint_at_end=True,
              checkpoint_freq=config.CHECKPOINT_FREQ,
@@ -164,10 +159,6 @@ class Anvil():
         os.environ['OMP_NUM_THREADS'] = '1'
         os.environ['NUMEXPR_NUM_THREADS'] = '1'
 
-    def train(self, **kwargs):
-        '''Train a model using the current --config setting'''
-        run_tune_experiment(self.config)
-
     def evaluate(self, **kwargs):
         '''Evaluate a model against EVAL_AGENTS models'''
         self.config.TRAINING_ITERATIONS = 0
@@ -177,16 +168,20 @@ class Anvil():
 
         run_tune_experiment(self.config)
 
+    def generate(self, **kwargs):
+        '''Generate game maps for the current --config setting'''
+        from neural_mmo.forge.blade.core import terrain
+        terrain.MapGenerator(self.config).generate()
+
     def render(self, **kwargs):
         '''Start a WebSocket server that autoconnects to the 3D Unity client'''
         self.config.RENDER = True
         self.config.NUM_WORKERS = 1
         self.evaluate(**kwargs)
 
-    def generate(self, **kwargs):
-        '''Generate game maps for the current --config setting'''
-        from neural_mmo.forge.blade.core import terrain
-        terrain.MapGenerator(self.config).generate()
+    def train(self, **kwargs):
+        '''Train a model using the current --config setting'''
+        run_tune_experiment(self.config)
 
 
 if __name__ == '__main__':
@@ -197,4 +192,3 @@ if __name__ == '__main__':
     from fire import core
     core.Display = Display
     Fire(Anvil)
-    print('here')

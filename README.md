@@ -62,14 +62,15 @@ them to your `package.json` file and rerun the `yarn install` command.
 # Model
 
 Add a `.wandb_api_key` to the root of the project.
-You can register an API key at [Weights & Biases](https://wandb.ai/site).
+Register for an API key at [Weights & Biases](https://wandb.ai/site).
 
 ### Commands
 
 Commands are stored in the scripts section of `./package.json`:
 
-- `yarn model:environment:generate` Generate model environments
-- `yarn model:train`                Train model
+- `poetry run python model/server/Forge.py generate` Generate model environments
+- `poetry run python model/server/Forge.py train --RENDER=True` Train model
+- `./model/client/run.sh` Visualize model training
 
 ## Website
 
