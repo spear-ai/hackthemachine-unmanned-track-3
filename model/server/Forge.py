@@ -40,7 +40,7 @@ def run_tune_experiment(config):
     atns = wrapper.actionSpace(config)
 
     # Register custom env and policies
-    ray.tune.registry.register_env('Neural_MMO',
+    ray.tune.registry.register_env('HACKtheMACHINE',
                                    lambda config: wrapper.RLlibEnv(config))
     rllib.models.ModelCatalog.register_custom_model(
         'godsword', wrapper.RLlibPolicy)
