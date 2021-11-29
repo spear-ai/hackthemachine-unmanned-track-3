@@ -6,8 +6,9 @@
     "cdk": "cdk",
     "lint:python": "poetry run flake8",
     "model:environment:generate": "poetry run python model/environment/scripts/generate.py",
-    "model:train": "poetry run python model/server/Forge.py train --config=EastPacificOcean",
-    "patch:python:ray": "poetry run model/server/ray/patch.py",
+    "model:train": "poetry run python model/server/Forge.py train --config=CompetitionRound1 --RENDER=True",
+    "model:ui": "./client/run.sh",
+    "patch:python:ray": "poetry run python model/server/ray/patch.py",
     "sagemaker:algorithm:create": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/create-sagemaker-algorithm.ts --extension ts",
     "sagemaker:algorithm:describe": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/describe-sagemaker-algorithm.ts --extension ts"
   },
