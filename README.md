@@ -72,9 +72,9 @@ Commands are stored in the scripts section of `./package.json`:
 - `poetry run python model/server/Forge.py train --RENDER=True` Train model
 - `./model/client/run.sh` Visualize model training
 
-### Getting started with the Neural MMO competition
+### Getting started
 
-Training for the original competition config:
+Training for the original Neural MMO competition config:
 
 ```sh
 poetry run python model/server/Forge.py generate --config=CompetitionRound1 --TERRAIN_RENDER=True
