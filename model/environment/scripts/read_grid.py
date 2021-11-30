@@ -8,7 +8,7 @@ import numpy as np
 # from neural_mmo.forge.blade.core import terrain
 import xarray as xr
 
-nc_file = 'data/grid002_100km_24x24.nc'
+nc_file = 'data/grid003_100km_26x26.nc'
 npy_file = nc_file.replace('.nc', '.npy')
 json_file = nc_file.replace('.nc', '.json')
 
