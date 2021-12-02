@@ -1,8 +1,12 @@
 from pdb import set_trace as T
+import json
 import os
+import random
 from neural_mmo.forge.blade import core
 from neural_mmo.forge.trinity.scripted import baselines
 from neural_mmo.forge.trinity.agent import Agent
+
+random.seed(0)
 
 
 class RLlibConfig:
@@ -85,76 +89,72 @@ class PathsConfig:
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
 
 
-def spawn_agents():
-    # This function is completely broken and needs to be fixed.
-    return [(14, 1)]
-
-
-class DefaultConfig(core.Config, RLlibConfig, PathsConfig, core.config.AllGameSystems):
+class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
     # Note: Consider extending only some of the core `config.*` classes:
     # * core.config.Combat
     # * core.config.NPC
     # * core.config.Progression
     # * core.config.Resource
 
-    @property
-    def SPAWN(self):
-        # Spawn "concurrent" creates agents before the game begins,
-        # so we choose this mode to get that behavior.
-        return self.SPAWN_CONCURRENT
-
-    @property
-    def SPAWN_CONCURRENT(self):
-        # We need to override this function because
-        # the spawn behavior doesn't do what we want.
-        return spawn_agents
-
     # Various model training settings
     NUM_WORKERS = 1
-    RESUME = None
+    TRAIN_BATCH_SIZE = 16 * 256 * NUM_WORKERS
     ROLLOUT_FRAGMENT_LENGTH = 256
     SGD_MINIBATCH_SIZE = 32
-    TRAIN_BATCH_SIZE = 16 * 256 * NUM_WORKERS
 
     # The number of time steps an agent looks into the future to maximize their reward
     TRAIN_HORIZON = 10
     EVALUATION_HORIZON = 10
 
-    # Assume maps are generated with a border of size 1.
-    # Are there ramifications to changing the default border size?
-    TERRAIN_BORDER = 16
-
-    # Arbitrarily set map size to 16 (including border).
-    # This will be overriden by `Forge.py` at run time anyway.
-    TERRAIN_CENTER = 128
-    TERRAIN_SIZE = TERRAIN_CENTER + (2 * TERRAIN_BORDER)
-
-    # The number of maps to train and evaluate on.
-    TERRAIN_EVAL_MAPS = 0
+    # We only train on one map and a *duplicate* evaluation map is a duplicate
+    TERRAIN_EVAL_MAPS = 1
     TERRAIN_TRAIN_MAPS = 1
 
     # Update path settings
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../../..'))
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
-    PATH_MAPS = os.path.join(
-        PATH_ENVIRONMENT,
-        f'generated/{TERRAIN_SIZE}x{TERRAIN_SIZE}'
-    )
+
+    @property
+    def PATH_MAPS(self):
+        return os.path.join(
+            self.PATH_ENVIRONMENT,
+            f'generated/{self.TERRAIN_SIZE}x{self.TERRAIN_SIZE}'
+        )
+
     PATH_MAPS_LARGE = PATH_MAPS  # We distinguish maps by size, not by "large" or "small"
     PATH_MAPS_SMALL = PATH_MAPS  # We distinguish maps by size, not by "large" or "small"
-    PATH_MAP_SUFFIX = 'map.npy'
+    PATH_MAP_SUFFIX_TRAIN = 'training-{}/map.npy'
+    PATH_MAP_SUFFIX_EVAL = PATH_MAP_SUFFIX_TRAIN  # Use the same map for evaluation
 
-    # Agents spawned per tick
-    PLAYER_SPAWN_ATTEMPTS = 24
+    # Load environment data based on the map size
+    CACHED_ENVIRONMENT_DATA = None
 
-    # The number of entitites. I think multiple entities used to be able to co-exist on a tile.
-    # Perhaps there's a way to bring that behavior back?
-    NENT = 1
+    @property
+    def ENVIRONMENT_DATA(self):
+        if self.CACHED_ENVIRONMENT_DATA is None:
+            file_path = os.path.join(self.PATH_MAPS, 'training-1/data.json')
+            with open(file_path) as file:
+                self.CACHED_ENVIRONMENT_DATA = json.load(file)
+
+        return self.CACHED_ENVIRONMENT_DATA
+
+    @property
+    def SPAWN(self):
+        return self.SPAWN_HANDLER
+
+    def SPAWN_HANDLER(self):
+        southern_port_list = self.ENVIRONMENT_DATA['southern_port_list']
+        random_southern_port = random.choice(southern_port_list)
+        return random_southern_port
+
+
+class EastPacificOcean(core.config.Achievement, DefaultConfig):
+    # The default map size is 24×24 (excluding the border)
+    TERRAIN_CENTER = 24
+
+    # TODO: Configure entity and population parameters
+    NENT = 4
     NPOP = 1
-
-
-class EastPacificOcean(DefaultConfig):
-    pass
 
 
 class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):

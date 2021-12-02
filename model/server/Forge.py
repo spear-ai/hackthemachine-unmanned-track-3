@@ -40,19 +40,26 @@ def run_tune_experiment(config):
     atns = wrapper.actionSpace(config)
 
     # Register custom env and policies
-    ray.tune.registry.register_env('HACKtheMACHINE',
-                                   lambda config: wrapper.RLlibEnv(config))
+    ray.tune.registry.register_env(
+        'HACKtheMACHINE',
+        lambda config: wrapper.RLlibEnv(config)
+    )
+
     rllib.models.ModelCatalog.register_custom_model(
-        'godsword', wrapper.RLlibPolicy)
-    def mapPolicy(agentID): return 'policy_{}'.format(
-        agentID % config.NPOLICIES)
+        'godsword',
+        wrapper.RLlibPolicy
+    )
+
+    def mapPolicy(agentID):
+        return 'policy_{}'.format(agentID % config.NPOLICIES)
 
     policies = {}
     for i in range(config.NPOLICIES):
         params = {
             "agent_id": i,
             "obs_space_dict": obs,
-            "act_space_dict": atns}
+            "act_space_dict": atns
+        }
         key = mapPolicy(i)
         policies[key] = (None, obs, atns, params)
 
@@ -85,9 +92,9 @@ def run_tune_experiment(config):
             'max_seq_len': config.LSTM_BPTT_HORIZON
         },
         'multiagent': {
+            'count_steps_by': 'agent_steps',
             'policies': policies,
-            'policy_mapping_fn': mapPolicy,
-            'count_steps_by': 'agent_steps'
+            'policy_mapping_fn': mapPolicy
         },
         'no_done_at_end': False,
         'num_envs_per_worker': 1,
@@ -102,29 +109,30 @@ def run_tune_experiment(config):
         'train_batch_size': config.TRAIN_BATCH_SIZE
     }
 
-    tune.run(wrapper.RLlibTrainer,
-             callbacks=[WandbLoggerCallback(
-                 api_key_file='.wandb_api_key',
-                 log_config=False,
-                 project='HACKtheMACHINE'
-             )],
-             checkpoint_at_end=True,
-             checkpoint_freq=config.CHECKPOINT_FREQ,
-             config=rllib_config,
-             keep_checkpoints_num=config.KEEP_CHECKPOINTS_NUM,
-             local_dir=os.path.normpath(os.path.join(
-                 __file__,
-                 '../experiments'
-             )),
-             name=config.__class__.__name__,
-             progress_reporter=ConsoleLog(),
-             restore=config.RESTORE,
-             resume=config.RESUME,
-             reuse_actors=True,
-             stop={'training_iteration': config.TRAINING_ITERATIONS},
-             trial_dirname_creator=lambda _: 'Run',
-             verbose=config.LOG_LEVEL
-             )
+    tune.run(
+        wrapper.RLlibTrainer,
+        callbacks=[WandbLoggerCallback(
+            api_key_file='.wandb_api_key',
+            log_config=False,
+            project='HACKtheMACHINE'
+        )],
+        checkpoint_at_end=True,
+        checkpoint_freq=config.CHECKPOINT_FREQ,
+        config=rllib_config,
+        keep_checkpoints_num=config.KEEP_CHECKPOINTS_NUM,
+        local_dir=os.path.normpath(os.path.join(
+            __file__,
+            '../experiments'
+        )),
+        name=config.__class__.__name__,
+        progress_reporter=ConsoleLog(),
+        restore=config.RESTORE,
+        resume=config.RESUME,
+        reuse_actors=True,
+        stop={'training_iteration': config.TRAINING_ITERATIONS},
+        trial_dirname_creator=lambda _: 'Run',
+        verbose=config.LOG_LEVEL
+    )
 
 
 class Anvil():
@@ -143,6 +151,7 @@ class Anvil():
     '''
 
     def __init__(self, **kwargs):
+        # TODO: We should refactor this code to use Python Argparse instead
         if 'help' in kwargs:
             return
 
@@ -181,6 +190,7 @@ class Anvil():
 
     def train(self, **kwargs):
         '''Train a model using the current --config setting'''
+        print('N_AGENT_OBS:', self.config.N_AGENT_OBS)
         run_tune_experiment(self.config)
 
 
