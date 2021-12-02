@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import List
 import imageio
 import numpy as np
-from neural_mmo.forge.blade.core import terrain
 
 
 default_map_size_list = [
@@ -43,6 +42,13 @@ default_map_size_list = [
     960,
     1024
 ]
+
+# Define map tiles (map directly to neural-mmo tiles)
+map_tiles = {
+    'border': 0,  # neural-mmo LAVA
+    'land': 2,  # neural-mmo GRASS
+    'water': 1,
+}
 
 
 def create_map(
@@ -122,20 +128,55 @@ def load_texture(file_path: str):
     return texture
 
 
-def generate_model_environments(
+def load_static_environment(map_size: int, border_size: int):
+    dir = os.path.normpath(os.path.join(
+        __file__,
+        f'../../static/{map_size + 2}x{map_size + 2}'
+    ))
+
+    try:
+        file_path = os.path.join(dir, 'map.npy')
+        encoded_map = np.load(file_path)
+
+        file_path = os.path.join(dir, 'data.json')
+        with open(file_path) as file:
+            data = json.load(file)
+
+        offset = border_size - 1
+        data['border_size'] = border_size
+
+        data['northern_port_list'] = [
+            [port[0] + offset, port[1] + offset]
+            for port in data['northern_port_list']
+        ]
+
+        data['southern_port_list'] = [
+            [port[0] + offset, port[1] + offset]
+            for port in data['southern_port_list']
+        ]
+
+        # Flip the map's y-coordinates
+        encoded_map = np.flipud(encoded_map)
+
+        # Fill in the rest of the map border
+        encoded_map = np.pad(
+            encoded_map,
+            constant_values=map_tiles['border'],
+            pad_width=offset
+        )
+
+        return {'data': data, 'encoded_map': encoded_map}
+    except OSError:
+        return None
+
+
+def generate_environments(
     border_size: int = 16,
     map_size_list: List[int] = default_map_size_list,
     output: str = None
 ):
     if output is None:
         output = os.path.normpath(os.path.join(__file__, '../../generated'))
-
-    # Define map tiles (map directly to neural-mmo tiles)
-    map_tiles = {
-        'border': 0,  # neural-mmo LAVA
-        'land': 2,  # neural-mmo GRASS
-        'water': 1,
-    }
 
     # Load textures for each map tyle
     textures_dir = os.path.normpath(os.path.join(__file__, '../../textures'))
@@ -147,53 +188,78 @@ def generate_model_environments(
     }
 
     for map_size in map_size_list:
-        map = create_map(map_size)
         environment_size = map_size + (2 * border_size)
 
-        environment_dir = os.path.join(
-            output,
-            f'{environment_size}x{environment_size}'
+        static_environment = load_static_environment(
+            border_size=border_size,
+            map_size=map_size
         )
 
-        # A list of northern and southern ports that can be used to
-        # create start/end points for vessels.
-        northern_port_list = []
-        southern_port_list = []
+        if static_environment is None:
+            map = create_map(map_size)
 
-        # for i in range(1, map_size // 2):
-        #     for j in range(1, map_size - 1):
-        #         x = j
+            # A list of northern and southern ports that can be used to
+            # create start/end points for vessels.
+            northern_port_list = []
+            southern_port_list = []
 
-        #         # If a northern water tile has land above or to the right, then it's a port
-        #         y = i
-        #         if not map[y][x]['is_land']:
-        #             if map[y - 1][x]['is_land']:
-        #                 northern_port_list.append([x, y])
-        #             elif map[y][x + 1]['is_land']:
-        #                 northern_port_list.append([x, y])
+            for i in range(1, map_size // 2):
+                for j in range(1, map_size - 1):
+                    x = j
 
-        #         # If a southern water tile has land below or to the right, then it's a port
-        #         y = map_size - i - 1
-        #         if not map[y][x]['is_land']:
-        #             if map[y + 1][x]['is_land']:
-        #                 southern_port_list.append([x, y])
-        #             elif map[y][x + 1]['is_land']:
-        #                 southern_port_list.append([x, y])
+                    # If a northern water tile has land above or to the right, then it's a port
+                    y = i
+                    if not map[y][x]['is_land']:
+                        if map[y - 1][x]['is_land']:
+                            northern_port_list.append([
+                                x + border_size,
+                                y + border_size
+                            ])
+                        elif map[y][x + 1]['is_land']:
+                            northern_port_list.append([
+                                x + border_size,
+                                y + border_size
+                            ])
 
-        # Encode map to numpy arrays
-        encoded_map = np.empty(shape=(environment_size, environment_size))
-        encoded_map.fill(map_tiles['border'])
+                    # If a southern water tile has land below or to the right, then it's a port
+                    y = map_size - i - 1
+                    if not map[y][x]['is_land']:
+                        if map[y + 1][x]['is_land']:
+                            southern_port_list.append([
+                                x + border_size,
+                                y + border_size
+                            ])
+                        elif map[y][x + 1]['is_land']:
+                            southern_port_list.append([
+                                x + border_size,
+                                y + border_size
+                            ])
 
-        for y in range(map_size):
-            for x in range(map_size):
-                i = y + border_size
-                j = x + border_size
+            # Encode map to numpy arrays
+            encoded_map = np.empty(shape=(environment_size, environment_size))
+            encoded_map.fill(map_tiles['border'])
 
-                if map[y][x]['is_land']:
-                    encoded_map[i][j] = map_tiles['land']
-                    continue
+            for y in range(map_size):
+                for x in range(map_size):
+                    i = y + border_size
+                    j = x + border_size
 
-                encoded_map[i][j] = map_tiles['water']
+                    if map[y][x]['is_land']:
+                        encoded_map[i][j] = map_tiles['land']
+                        continue
+
+                    encoded_map[i][j] = map_tiles['water']
+
+            # Create environment JSON data
+            data = {
+                'border_size': border_size,
+                'map_tiles': map_tiles,
+                'northern_port_list': northern_port_list,
+                'southern_port_list': southern_port_list
+            }
+        else:
+            data = static_environment['data']
+            encoded_map = static_environment['encoded_map']
 
         # Create thumbnail from encoded map
         thumbnail = [
@@ -202,13 +268,13 @@ def generate_model_environments(
         ]
         thumbnail = np.vstack([np.hstack(tile) for tile in thumbnail])
 
-        # Create environment JSON data
-        data = {
-            'map': map,
-            'map_tiles': map_tiles,
-            'northern_port_list': northern_port_list,
-            'southern_port_list': southern_port_list
-        }
+        # Change default camera angle of the map
+        encoded_map = np.rot90(encoded_map, 2)
+
+        environment_dir = os.path.join(
+            output,
+            f'{environment_size}x{environment_size}/training-1'
+        )
 
         # Ensure the environment directory exists
         Path(environment_dir).mkdir(exist_ok=True, parents=True)
@@ -228,4 +294,4 @@ def generate_model_environments(
 
 
 if __name__ == '__main__':
-    generate_model_environments()
+    generate_environments()
