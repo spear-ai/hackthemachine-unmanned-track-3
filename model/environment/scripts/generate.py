@@ -203,7 +203,7 @@ def generate_environments(
             northern_port_list = []
             southern_port_list = []
 
-            for i in range(1, map_size // 2):
+            for i in range(1, map_size // 3):
                 for j in range(1, map_size - 1):
                     x = j
 
