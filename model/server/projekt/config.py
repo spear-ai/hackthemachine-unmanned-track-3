@@ -154,6 +154,10 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     NPOP = 1  # The number of teams
     PLAYER_SPAWN_ATTEMPTS = 1
 
+    # Agents run out of food/water and take damage from hunger/thirst.
+    # Therefore, increasing their health also increases their range.
+    BASE_HEALTH = 99  # Must be less than 100
+
 
 class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
     '''Large scale Neural MMO training setting
