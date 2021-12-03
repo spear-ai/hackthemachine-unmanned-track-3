@@ -90,4 +90,4 @@ class Impassible(metaclass=Meta):
 
 
 class Habitable(metaclass=Meta):
-    materials = {Grass, Scrub, Forest, Water}
+    materials = {Scrub, Forest, Water}
