@@ -131,7 +131,7 @@ def load_texture(file_path: str):
 def load_static_environment(map_size: int, border_size: int):
     dir = os.path.normpath(os.path.join(
         __file__,
-        f'../../static/{map_size + 2}x{map_size + 2}'
+        f'../../static/{map_size}x{map_size}'
     ))
 
     try:
@@ -142,16 +142,15 @@ def load_static_environment(map_size: int, border_size: int):
         with open(file_path) as file:
             data = json.load(file)
 
-        offset = border_size - 1
         data['border_size'] = border_size
 
         data['northern_port_list'] = [
-            [port[0] + offset, port[1] + offset]
+            [port[0] + border_size, port[1] + border_size]
             for port in data['northern_port_list']
         ]
 
         data['southern_port_list'] = [
-            [port[0] + offset, port[1] + offset]
+            [port[0] + border_size, port[1] + border_size]
             for port in data['southern_port_list']
         ]
 
@@ -162,7 +161,7 @@ def load_static_environment(map_size: int, border_size: int):
         encoded_map = np.pad(
             encoded_map,
             constant_values=map_tiles['border'],
-            pad_width=offset
+            pad_width=border_size
         )
 
         return {'data': data, 'encoded_map': encoded_map}
