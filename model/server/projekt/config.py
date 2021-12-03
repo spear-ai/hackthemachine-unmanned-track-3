@@ -23,10 +23,11 @@ class RLlibConfig:
     # Restore (overrides resume) will force load a specific checkpoint (e.g. for rendering)
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../..'))
     RESUME = False
-    RESTORE = os.path.normpath(os.path.join(
-        PATH_ROOT,
-        'experiments/CompetitionRound1/Dev_9fe1/checkpoint_001000/checkpoint-1000')
-    )
+    RESTORE = None
+    # RESTORE = os.path.normpath(os.path.join(
+    #     PATH_ROOT,
+    #     'experiments/CompetitionRound1/Dev_9fe1/checkpoint_001000/checkpoint-1000')
+    # )
 
     # Policy specification
     AGENTS = [Agent]

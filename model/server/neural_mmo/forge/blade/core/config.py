@@ -528,6 +528,10 @@ class Achievement:
     def Achievement(self):
         return True
 
+    CONTRABAND_DELIVERED_EASY = 32
+    CONTRABAND_DELIVERED_NORMAL = 64
+    CONTRABAND_DELIVERED_HARD = 127
+
     PLAYER_KILLS_EASY = 1
     PLAYER_KILLS_NORMAL = 3
     PLAYER_KILLS_HARD = 6

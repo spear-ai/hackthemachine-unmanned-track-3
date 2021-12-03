@@ -3,16 +3,12 @@ from collections import defaultdict
 from tqdm import tqdm
 import numpy as np
 import gym
-import wandb
 import trueskill
-
 import torch
 from torch import nn
 from torch.nn.utils import rnn
-
 from ray import rllib
 from pdb import set_trace as TT
-
 import ray.rllib.agents.ppo.ppo as ppo
 import ray.rllib.agents.ppo.appo as appo
 import ray.rllib.agents.impala.impala as impala
@@ -20,15 +16,12 @@ from ray.rllib.agents.callbacks import DefaultCallbacks
 from ray.tune.integration.wandb import WandbLoggerCallback
 from ray.rllib.utils.spaces.flexdict import FlexDict
 from ray.rllib.models.torch.recurrent_net import RecurrentNetwork
-
 from neural_mmo.forge.blade.io.action.static import Action, Fixed
 from neural_mmo.forge.blade.io.stimulus.static import Stimulus
 from neural_mmo.forge.blade.lib import overlay
 from neural_mmo.forge.blade.systems import ai
-
 from neural_mmo.forge.ethyr.torch import policy
 from neural_mmo.forge.ethyr.torch.policy import attention
-
 from neural_mmo.forge.trinity import Env
 from neural_mmo.forge.trinity.dataframe import DataType
 from neural_mmo.forge.trinity.overlay import Overlay, OverlayRegistry

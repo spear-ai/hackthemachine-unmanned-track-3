@@ -111,6 +111,13 @@ class Stimulus(Config):
             self.max = config.BASE_HEALTH
             self.scale = 0.1
 
+      # Represents a unitless amount of illicit goods carried. (e.g. Cocaine)
+      # It's unclear whether this value should be continuous or discrete.
+      # class ContrabandQuantity(node.Continuous):
+      #    def init(self, config):
+      #       self.scale = 0.1
+      #       self.val = 1
+
       #Status effects
       class Freeze(node.Continuous):
          def init(self, config):
