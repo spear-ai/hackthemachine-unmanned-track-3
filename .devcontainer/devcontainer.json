@@ -13,6 +13,9 @@
     "sleistner.vscode-fileutils",
     "tyriar.sort-lines"
   ],
+  "forwardPorts": [
+    8080
+  ],
   "runArgs": [
     "--env-file",
     ".env",
