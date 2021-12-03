@@ -39,7 +39,6 @@ from neural_mmo.forge.trinity.overlay import Overlay, OverlayRegistry
 class Input(nn.Module):
     def __init__(self, config, embeddings, attributes):
         '''Network responsible for processing observations
-
         Args:
            config     : A configuration object
            embeddings : An attribute embedding module
@@ -65,10 +64,8 @@ class Input(nn.Module):
 
     def forward(self, inp):
         '''Produces tensor representations from an IO object
-
         Args:                                                                   
            inp: An IO object specifying observations                      
-
         Returns:
            entityLookup: A fixed size representation of each entity
         '''
@@ -95,7 +92,6 @@ class Input(nn.Module):
 class Output(nn.Module):
     def __init__(self, config):
         '''Network responsible for selecting actions
-
         Args:
            config: A Config object
         '''
@@ -112,7 +108,6 @@ class Output(nn.Module):
 
     def forward(self, obs, lookup):
         '''Populates an IO object with actions in-place                         
-
         Args:                                                                   
            obs     : An IO object specifying observations
            lookup  : A fixed size representation of each entity
@@ -157,7 +152,6 @@ class DiscreteAction(nn.Module):
 class Base(nn.Module):
     def __init__(self, config):
         '''Base class for baseline policies
-
         Args:
            config: A Configuration object
         '''
@@ -175,7 +169,6 @@ class Base(nn.Module):
     def hidden(self, obs, state=None, lens=None):
         '''Abstract method for hidden state processing, recurrent or otherwise,
         applied between the input and output modules
-
         Args:
            obs: An observation dictionary, provided by forward()
            state: The previous hidden state, only provided for recurrent nets
