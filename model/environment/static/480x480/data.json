@@ -1,7 +1,7 @@
 {
   "border_size": 1,
   "map_tiles": {
-    "border": 0,
+    "border": 5,
     "land": 2,
     "water": 1
   },
