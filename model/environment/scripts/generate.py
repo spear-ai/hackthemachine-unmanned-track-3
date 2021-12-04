@@ -45,7 +45,7 @@ default_map_size_list = [
 
 # Define map tiles (map directly to neural-mmo tiles)
 map_tiles = {
-    'border': 0,  # neural-mmo LAVA
+    'border': 5,  # neural-mmo STONE
     'land': 2,  # neural-mmo GRASS
     'water': 1,
 }
