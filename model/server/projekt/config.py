@@ -142,13 +142,16 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     def SPAWN_HANDLER(self):
         southern_port_list = self.ENVIRONMENT_DATA['southern_port_list']
         random_southern_port = random.choice(southern_port_list)
-        random_southern_port = [random_southern_port[1], random_southern_port[0]]
+        random_southern_port = [
+            random_southern_port[1],
+            random_southern_port[0]
+        ]
         return random_southern_port
 
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):
-    # The default map size is 48×48 (excluding the border)
-    TERRAIN_CENTER = 48
+    # The default map size is 72×72 (excluding the border)
+    TERRAIN_CENTER = 72
 
     NENT = 4  # The number of agents that spawn
     NMOB = 0  # The number of NPCs that spawn
