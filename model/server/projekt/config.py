@@ -144,7 +144,7 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
 
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):
-    # The default map size is 48×48 (excluding the border)
+    # The default map size is 72×72 (excluding the border)
     TERRAIN_CENTER = 72
 
     NENT = 4  # The number of agents that spawn
