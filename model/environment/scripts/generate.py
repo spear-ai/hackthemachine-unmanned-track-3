@@ -267,9 +267,6 @@ def generate_environments(
         ]
         thumbnail = np.vstack([np.hstack(tile) for tile in thumbnail])
 
-        # Change default camera angle of the map
-        encoded_map = np.rot90(encoded_map, 2)
-
         environment_dir = os.path.join(
             output,
             f'{environment_size}x{environment_size}/training-1'
