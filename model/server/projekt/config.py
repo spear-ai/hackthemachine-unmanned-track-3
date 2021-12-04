@@ -145,7 +145,7 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # The default map size is 48×48 (excluding the border)
-    TERRAIN_CENTER = 48
+    TERRAIN_CENTER = 72
 
     NENT = 4  # The number of agents that spawn
     NMOB = 0  # The number of NPCs that spawn
@@ -156,7 +156,7 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # Therefore, increasing their health also increases their range.
     BASE_HEALTH = 99  # Must be less than 100
 
-    # Reward the agent for achievements like:
+    # Reward the agent for achievements such as:
     # * Move contraband closer to its destination
     REWARD_ACHIEVEMENT = True
 
