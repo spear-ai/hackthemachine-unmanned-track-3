@@ -190,7 +190,6 @@ class Anvil():
 
     def train(self, **kwargs):
         '''Train a model using the current --config setting'''
-        print('N_AGENT_OBS:', self.config.N_AGENT_OBS)
         run_tune_experiment(self.config)
 
 

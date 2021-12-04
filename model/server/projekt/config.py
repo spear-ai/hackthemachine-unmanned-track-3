@@ -43,7 +43,7 @@ class RLlibConfig:
     EVALUATION_INTERVAL = 1
     EVALUATION_NUM_EPISODES = 3
     EVALUATION_PARALLEL = True
-    TRAINING_ITERATIONS = 3
+    TRAINING_ITERATIONS = 8
     KEEP_CHECKPOINTS_NUM = 3
     CHECKPOINT_FREQ = 1
     LSTM_BPTT_HORIZON = 2
@@ -86,22 +86,16 @@ class PathsConfig:
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
 
 
-class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
-    # Note: Consider extending only some of the core `config.*` classes:
-    # * core.config.Combat
-    # * core.config.NPC
-    # * core.config.Progression
-    # * core.config.Resource
-
+class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
     # Various model training settings
     NUM_WORKERS = 1
-    TRAIN_BATCH_SIZE = 16 * 256 * NUM_WORKERS
+    TRAIN_BATCH_SIZE = 64 * 256 * NUM_WORKERS
     ROLLOUT_FRAGMENT_LENGTH = 256
     SGD_MINIBATCH_SIZE = 32
 
     # The number of time steps an agent looks into the future to maximize their reward
-    TRAIN_HORIZON = 1024
-    EVALUATION_HORIZON = 1024
+    TRAIN_HORIZON = 10
+    EVALUATION_HORIZON = 10
 
     # We only train on one map and a *duplicate* evaluation map is a duplicate
     TERRAIN_EVAL_MAPS = 1
@@ -142,15 +136,18 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     def SPAWN_HANDLER(self):
         southern_port_list = self.ENVIRONMENT_DATA['southern_port_list']
         random_southern_port = random.choice(southern_port_list)
-        random_southern_port = [random_southern_port[1], random_southern_port[0]]
+        random_southern_port = [
+            random_southern_port[1],
+            random_southern_port[0]
+        ]
         return random_southern_port
 
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # The default map size is 24×24 (excluding the border)
-    TERRAIN_CENTER = 24
+    TERRAIN_CENTER = 96
 
-    NENT = 1  # The number of agents that spawn
+    NENT = 4  # The number of agents that spawn
     NMOB = 0  # The number of NPCs that spawn
     NPOP = 1  # The number of teams
     PLAYER_SPAWN_ATTEMPTS = 1
@@ -158,6 +155,10 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # Agents run out of food/water and take damage from hunger/thirst.
     # Therefore, increasing their health also increases their range.
     BASE_HEALTH = 99  # Must be less than 100
+
+    # Reward the agent for achievements like:
+    # * Move contraband closer to its destination
+    REWARD_ACHIEVEMENT = True
 
 
 class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
@@ -189,13 +190,13 @@ class SmallMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.confi
 
     # Memory/Batch Scale
     NUM_WORKERS = 1
-    TRAIN_BATCH_SIZE = 16 * 256 * NUM_WORKERS
+    TRAIN_BATCH_SIZE = 64 * 256 * NUM_WORKERS
     ROLLOUT_FRAGMENT_LENGTH = 256
     SGD_MINIBATCH_SIZE = 32
 
     # Horizon
-    TRAIN_HORIZON = 10
-    EVALUATION_HORIZON = 10
+    TRAIN_HORIZON = 64
+    EVALUATION_HORIZON = 64
 
 
 class Debug(SmallMaps, core.config.AllGameSystems):
