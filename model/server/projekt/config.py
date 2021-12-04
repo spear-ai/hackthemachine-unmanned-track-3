@@ -142,6 +142,7 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     def SPAWN_HANDLER(self):
         southern_port_list = self.ENVIRONMENT_DATA['southern_port_list']
         random_southern_port = random.choice(southern_port_list)
+        random_southern_port = [random_southern_port[1], random_southern_port[0]]
         return random_southern_port
 
 
