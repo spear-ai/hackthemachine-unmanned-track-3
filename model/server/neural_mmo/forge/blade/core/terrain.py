@@ -71,6 +71,8 @@ class MapGenerator:
             return Terrain.GRASS
         if val <= config.TERRAIN_FOREST:
             return Terrain.FOREST
+        if val == config.TERRAIN_COKE:
+            return Terrain.COKE
         return Terrain.STONE
 
     def generate(self):
@@ -192,5 +194,8 @@ class MapGenerator:
         edge = l1 == size//2 - border - 1
         stone = (matl == Terrain.STONE) | (matl == Terrain.WATER)
         matl[edge & stone] = Terrain.FOREST
+        # edit the below COKE to make the location somewhere near the top left of the
+        # grid.  This Terrain type is heavily rewarded.
+        matl[(min(X),max(Y))] = Terrain.COKE
 
         return val, matl

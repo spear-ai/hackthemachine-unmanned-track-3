@@ -44,6 +44,7 @@ class History:
       self.attack  = None
   
       self.origPos     = ent.pos
+      self.contraband_delivered = 0
       self.exploration = 0
       self.playerKills = 0
 
@@ -59,6 +60,12 @@ class History:
 
       exploration      = utils.linf(entity.pos, self.origPos)
       self.exploration = max(exploration, self.exploration)
+
+      contraband_destination = (127, 127) #(0,0) This is hardcoded for now
+      self.contraband_delivered = max(
+         self.contraband_delivered,
+         utils.l2(entity.pos, contraband_destination)
+      )
 
       self.timeAlive.increment()
 

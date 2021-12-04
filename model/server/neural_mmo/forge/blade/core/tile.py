@@ -50,6 +50,11 @@ class Tile:
    def lava(self):
       return self.mat == material.Lava
 
+
+   @property
+   def coke(self):
+      return self.mat == material.coke
+
    @property
    def static(self):
       '''No updates needed'''

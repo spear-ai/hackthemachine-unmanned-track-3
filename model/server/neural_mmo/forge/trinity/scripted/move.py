@@ -113,7 +113,7 @@ def forageDijkstra(config, ob, actions, food_max, water_max, cutoff=100):
    water  = io.Observation.attribute(agent, Entity.Water)
 
    best      = -1000 
-   start     = (0, 0)
+   start     = (0,0)
    goal      = (0, 0)
 
    reward    = {start: (food, water)}

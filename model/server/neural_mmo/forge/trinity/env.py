@@ -261,6 +261,14 @@ class Env:
 
         quill = self.quill
 
+        blob = quill.register(
+            'Contraband Delivered',
+            self.realm.tick,
+            quill.HISTOGRAM,
+            quill.SCATTER
+        )
+        blob.log(ent.history.contraband_delivered)
+
         blob = quill.register('Population', self.realm.tick,
                               quill.HISTOGRAM, quill.LINE, quill.SCATTER)
         blob.log(self.realm.population)

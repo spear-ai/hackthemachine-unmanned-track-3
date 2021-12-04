@@ -17,6 +17,8 @@ def map_to_rewards(tiles, entity) -> List[List[float]]:
    around_water_reward = 1.0 + math.pow(
       (1 - entity.resources.water.val / entity.resources.water.max) * 15.0,
       1.25)
+   
+   coke_reward = 1000.0
 
    reward_matrix = np.full((len(tiles), len(tiles[0])), 0.0)
 
@@ -35,6 +37,9 @@ def map_to_rewards(tiles, entity) -> List[List[float]]:
 
          if tile_val == 'water':
             reward_matrix[line][column] += water_reward
+         
+         if tile_val == 'coke':
+            reward_matrix[line][column] += coke_reward
 
          #TODO: Make these comparisons work off of the water Enum type
          #instead of string compare

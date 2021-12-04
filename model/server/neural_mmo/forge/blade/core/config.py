@@ -190,6 +190,9 @@ class Config(Template):
         mmax = self.TERRAIN_CENTER + self.TERRAIN_BORDER
         mmin = self.TERRAIN_BORDER
 
+        # hard code spawn
+        # r, c = (0,0)
+
         var = np.random.randint(mmin, mmax)
         fixed = np.random.choice([mmin, mmax])
         r, c = int(var), int(fixed)
@@ -527,6 +530,10 @@ class Achievement:
     @property  # Reserved flag
     def Achievement(self):
         return True
+    
+    CONTRABAND_DELIVERED_EASY = 32
+    CONTRABAND_DELIVERED_NORMAL = 64
+    CONTRABAND_DELIVERED_HARD = 127
 
     PLAYER_KILLS_EASY = 1
     PLAYER_KILLS_NORMAL = 3

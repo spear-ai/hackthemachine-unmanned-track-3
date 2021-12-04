@@ -19,6 +19,10 @@ class Lava(Material):
     tex = 'lava'
     index = 0
 
+class Coke(Material):
+    tex = 'coke'
+    index = 8
+
 
 class Water(Material):
     tex = 'water'
@@ -82,7 +86,7 @@ class Meta(type):
 
 
 class All(metaclass=Meta):
-    materials = {Lava, Water, Grass, Scrub, Forest, Stone, Orerock}
+    materials = {Lava, Water, Grass, Scrub, Forest, Stone, Orerock, Coke}
 
 
 class Impassible(metaclass=Meta):
@@ -90,4 +94,4 @@ class Impassible(metaclass=Meta):
 
 
 class Habitable(metaclass=Meta):
-    materials = {Grass, Scrub, Forest, Water}
+    materials = {Scrub, Forest, Water, Coke} # no Grass

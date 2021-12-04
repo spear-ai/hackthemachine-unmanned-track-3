@@ -23,10 +23,11 @@ class RLlibConfig:
     # Restore (overrides resume) will force load a specific checkpoint (e.g. for rendering)
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../..'))
     RESUME = False
-    RESTORE = os.path.normpath(os.path.join(
-        PATH_ROOT,
-        'experiments/CompetitionRound1/Dev_9fe1/checkpoint_001000/checkpoint-1000')
-    )
+    RESTORE = None
+    # RESTORE = os.path.normpath(os.path.join(
+    #     PATH_ROOT,
+    #     'experiments/CompetitionRound1/Dev_9fe1/checkpoint_001000/checkpoint-1000')
+    # )
 
     # Policy specification
     AGENTS = [Agent]
@@ -153,8 +154,11 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     TERRAIN_CENTER = 24
 
     # TODO: Configure entity and population parameters
-    NENT = 4
-    NPOP = 1
+    NENT = 1 # agents
+    NMOB = 0 # NPCs that spawn
+    NPOP = 1 # teams
+    PLAYER_SPAWN_ATTEMPTS = 1
+    REWARD_ACHIEVEMENT = True
 
 
 class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
