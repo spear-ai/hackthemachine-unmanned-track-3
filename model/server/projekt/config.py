@@ -24,10 +24,6 @@ class RLlibConfig:
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../..'))
     RESUME = False
     RESTORE = None
-    # RESTORE = os.path.normpath(os.path.join(
-    #     PATH_ROOT,
-    #     'experiments/CompetitionRound1/Dev_9fe1/checkpoint_001000/checkpoint-1000')
-    # )
 
     # Policy specification
     AGENTS = [Agent]
@@ -104,8 +100,8 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     SGD_MINIBATCH_SIZE = 32
 
     # The number of time steps an agent looks into the future to maximize their reward
-    TRAIN_HORIZON = 10
-    EVALUATION_HORIZON = 10
+    TRAIN_HORIZON = 1024
+    EVALUATION_HORIZON = 1024
 
     # We only train on one map and a *duplicate* evaluation map is a duplicate
     TERRAIN_EVAL_MAPS = 1
@@ -146,6 +142,7 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     def SPAWN_HANDLER(self):
         southern_port_list = self.ENVIRONMENT_DATA['southern_port_list']
         random_southern_port = random.choice(southern_port_list)
+        random_southern_port = [random_southern_port[1], random_southern_port[0]]
         return random_southern_port
 
 
@@ -153,9 +150,14 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # The default map size is 24×24 (excluding the border)
     TERRAIN_CENTER = 24
 
-    # TODO: Configure entity and population parameters
-    NENT = 4
-    NPOP = 1
+    NENT = 1  # The number of agents that spawn
+    NMOB = 0  # The number of NPCs that spawn
+    NPOP = 1  # The number of teams
+    PLAYER_SPAWN_ATTEMPTS = 1
+
+    # Agents run out of food/water and take damage from hunger/thirst.
+    # Therefore, increasing their health also increases their range.
+    BASE_HEALTH = 99  # Must be less than 100
 
 
 class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):

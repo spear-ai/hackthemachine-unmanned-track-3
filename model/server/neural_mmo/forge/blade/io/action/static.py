@@ -7,233 +7,256 @@ from neural_mmo.forge.blade.io.node import Node, NodeType
 from neural_mmo.forge.blade.systems import combat
 from neural_mmo.forge.blade.io.stimulus import Static
 
+
 class Fixed:
-   pass
+    pass
 
-#ActionRoot
+# ActionRoot
+
+
 class Action(Node):
-   nodeType = NodeType.SELECTION
+    nodeType = NodeType.SELECTION
 
-   @staticproperty
-   def edges():
-      return [Move, Attack]
+    @staticproperty
+    def edges():
+        return [Move, Attack]
 
-   @staticproperty
-   def n():
-      return len(Action.arguments)
+    @staticproperty
+    def n():
+        return len(Action.arguments)
 
-   def args(stim, entity, config):
-      return Static.edges 
+    def args(stim, entity, config):
+        return Static.edges
 
-   #Called upon module import (see bottom of file)
-   #Sets up serialization domain
-   def hook():
-      idx = 0
-      arguments = []
-      for action in Action.edges:
-         for args in action.edges:
-            if not 'edges' in args.__dict__:
-               continue
-            for arg in args.edges: 
-               arguments.append(arg)
-               arg.serial = tuple([idx])
-               arg.idx = idx 
-               idx += 1
-      Action.arguments = arguments
+    # Called upon module import (see bottom of file)
+    # Sets up serialization domain
+    def hook():
+        idx = 0
+        arguments = []
+        for action in Action.edges:
+            for args in action.edges:
+                if not 'edges' in args.__dict__:
+                    continue
+                for arg in args.edges:
+                    arguments.append(arg)
+                    arg.serial = tuple([idx])
+                    arg.idx = idx
+                    idx += 1
+        Action.arguments = arguments
+
 
 class Move(Node):
-   priority = 1
-   nodeType = NodeType.SELECTION
-   def call(env, entity, direction):
-      r, c  = entity.pos
-      entID = entity.entID
-      entity.history.lastPos = (r, c)
-      rDelta, cDelta = direction.delta
-      rNew, cNew = r+rDelta, c+cDelta
-      
-      #One agent per cell
-      tile = env.map.tiles[rNew, cNew] 
-      if tile.occupied and not tile.lava:
-         return
+    priority = 1
+    nodeType = NodeType.SELECTION
 
-      if entity.status.freeze > 0:
-         return
+    def call(env, entity, direction):
+        r, c = entity.pos
+        entID = entity.entID
+        entity.history.lastPos = (r, c)
+        rDelta, cDelta = direction.delta
+        rNew, cNew = r+rDelta, c+cDelta
 
-      env.dataframe.move(Static.Entity, entID, (r, c), (rNew, cNew))
-      entity.base.r.update(rNew)
-      entity.base.c.update(cNew)
+        # One agent per cell
+        tile = env.map.tiles[rNew, cNew]
+        if tile.occupied and not tile.lava:
+            return
 
-      env.map.tiles[r, c].delEnt(entID)
-      env.map.tiles[rNew, cNew].addEnt(entity)
+        if entity.status.freeze > 0:
+            return
 
-      if env.map.tiles[rNew, cNew].lava:
-         entity.receiveDamage(None, entity.resources.health.val)
+        env.dataframe.move(Static.Entity, entID, (r, c), (rNew, cNew))
+        entity.base.r.update(rNew)
+        entity.base.c.update(cNew)
 
-   @staticproperty
-   def edges():
-      return [Direction]
+        env.map.tiles[r, c].delEnt(entID)
+        env.map.tiles[rNew, cNew].addEnt(entity)
 
-   @staticproperty
-   def leaf():
-      return True
+        # if env.map.tiles[rNew, cNew].lava:
+        #    entity.receiveDamage(None, entity.resources.health.val)
+
+    @staticproperty
+    def edges():
+        return [Direction]
+
+    @staticproperty
+    def leaf():
+        return True
+
 
 class Direction(Node):
-   argType = Fixed
+    argType = Fixed
 
-   @staticproperty
-   def edges():
-      return [North, South, East, West]
+    @staticproperty
+    def edges():
+        return [North, South, East, West]
 
-   def args(stim, entity, config):
-      return Direction.edges
+    def args(stim, entity, config):
+        return Direction.edges
+
 
 class North(Node):
-   delta = (-1, 0)
+    delta = (-1, 0)
+
 
 class South(Node):
-   delta = (1, 0)
+    delta = (1, 0)
+
 
 class East(Node):
-   delta = (0, 1)
+    delta = (0, 1)
+
 
 class West(Node):
-   delta = (0, -1)
+    delta = (0, -1)
 
 
 class Attack(Node):
-   priority = 0
-   nodeType = NodeType.SELECTION
-   @staticproperty
-   def n():
-      return 3
+    priority = 0
+    nodeType = NodeType.SELECTION
 
-   @staticproperty
-   def edges():
-      return [Style, Target]
+    @staticproperty
+    def n():
+        return 3
 
-   @staticproperty
-   def leaf():
-      return True
+    @staticproperty
+    def edges():
+        return [Style, Target]
 
-   def inRange(entity, stim, config, N):
-      R, C = stim.shape
-      R, C = R//2, C//2
+    @staticproperty
+    def leaf():
+        return True
 
-      rets = set([entity])
-      for r in range(R-N, R+N+1):
-         for c in range(C-N, C+N+1):
-            for e in stim[r, c].ents.values():
-               rets.add(e)
+    def inRange(entity, stim, config, N):
+        R, C = stim.shape
+        R, C = R//2, C//2
 
-      rets = list(rets)
-      return rets
+        rets = set([entity])
+        for r in range(R-N, R+N+1):
+            for c in range(C-N, C+N+1):
+                for e in stim[r, c].ents.values():
+                    rets.add(e)
 
-   def l1(pos, cent):
-      r, c = pos
-      rCent, cCent = cent
-      return abs(r - rCent) + abs(c - cCent)
+        rets = list(rets)
+        return rets
 
-   def call(env, entity, style, targ):
-      if entity.isPlayer and not env.config.game_system_enabled('Combat'):
-         return 
+    def l1(pos, cent):
+        r, c = pos
+        rCent, cCent = cent
+        return abs(r - rCent) + abs(c - cCent)
 
-      #Check if self targeted
-      if entity.entID == targ.entID:
-         return
+    def call(env, entity, style, targ):
+        if entity.isPlayer and not env.config.game_system_enabled('Combat'):
+            return
 
-      #ADDED: POPULATION IMMUNITY
-      #if entity.population == targ.population:
-      #   return
+        # Check if self targeted
+        if entity.entID == targ.entID:
+            return
 
-      #Check attack range
-      rng     = style.attackRange(env.config)
-      start   = np.array(entity.base.pos)
-      end     = np.array(targ.base.pos)
-      dif     = np.max(np.abs(start - end))
+        # ADDED: POPULATION IMMUNITY
+        # if entity.population == targ.population:
+        #   return
 
-      #Can't attack same cell or out of range
-      if dif == 0 or dif > rng:
-         return 
-      
-      #Execute attack
-      entity.history.attack = {}
-      entity.history.attack['target'] = targ.entID
-      entity.history.attack['style'] = style.__name__
-      targ.attacker = entity
-      targ.attackerID.update(entity.entID)
+        # Check attack range
+        rng = style.attackRange(env.config)
+        start = np.array(entity.base.pos)
+        end = np.array(targ.base.pos)
+        dif = np.max(np.abs(start - end))
 
-      dmg = combat.attack(entity, targ, style.skill)
-      if style.freeze and dmg > 0:
-         targ.status.freeze.update(env.config.COMBAT_FREEZE_TIME)
+        # Can't attack same cell or out of range
+        if dif == 0 or dif > rng:
+            return
 
-      return dmg
+        # Execute attack
+        entity.history.attack = {}
+        entity.history.attack['target'] = targ.entID
+        entity.history.attack['style'] = style.__name__
+        targ.attacker = entity
+        targ.attackerID.update(entity.entID)
+
+        dmg = combat.attack(entity, targ, style.skill)
+        if style.freeze and dmg > 0:
+            targ.status.freeze.update(env.config.COMBAT_FREEZE_TIME)
+
+        return dmg
+
 
 class Style(Node):
-   argType = Fixed
-   @staticproperty
-   def edges():
-      return [Melee, Range, Mage]
+    argType = Fixed
 
-   def args(stim, entity, config):
-      return Style.edges
+    @staticproperty
+    def edges():
+        return [Melee, Range, Mage]
+
+    def args(stim, entity, config):
+        return Style.edges
 
 
 class Target(Node):
-   argType = None
-   #argType = Player 
+    argType = None
+    #argType = Player
 
-   @classmethod
-   def N(cls, config):
-      #return config.WINDOW ** 2
-      return config.N_AGENT_OBS
+    @classmethod
+    def N(cls, config):
+        # return config.WINDOW ** 2
+        return config.N_AGENT_OBS
 
-   def args(stim, entity, config):
-      #Should pass max range?
-      return Attack.inRange(entity, stim, config, None)
+    def args(stim, entity, config):
+        # Should pass max range?
+        return Attack.inRange(entity, stim, config, None)
+
 
 class Melee(Node):
-   nodeType = NodeType.ACTION
-   index = 0
-   freeze=False
+    nodeType = NodeType.ACTION
+    index = 0
+    freeze = False
 
-   def attackRange(config):
-      return config.COMBAT_MELEE_REACH
+    def attackRange(config):
+        return config.COMBAT_MELEE_REACH
 
-   def skill(entity):
-      return entity.skills.melee
+    def skill(entity):
+        return entity.skills.melee
+
 
 class Range(Node):
-   nodeType = NodeType.ACTION
-   index = 1
-   freeze=False
+    nodeType = NodeType.ACTION
+    index = 1
+    freeze = False
 
-   def attackRange(config):
-      return config.COMBAT_RANGE_REACH
+    def attackRange(config):
+        return config.COMBAT_RANGE_REACH
 
-   def skill(entity):
-      return entity.skills.range
+    def skill(entity):
+        return entity.skills.range
+
 
 class Mage(Node):
-   nodeType = NodeType.ACTION
-   index = 2
-   freeze=True
+    nodeType = NodeType.ACTION
+    index = 2
+    freeze = True
 
-   def attackRange(config):
-      return config.COMBAT_MAGE_REACH
+    def attackRange(config):
+        return config.COMBAT_MAGE_REACH
 
-   def skill(entity):
-      return entity.skills.mage
+    def skill(entity):
+        return entity.skills.mage
 
-#TODO: Add communication
+# TODO: Add communication
+
+
 class Message:
-   pass
+    pass
 
-#TODO: Add trade
+# TODO: Add trade
+
+
 class Exchange:
-   pass
+    pass
 
-#TODO: Solve AGI
+# TODO: Solve AGI
+
+
 class BecomeSkynet:
-   pass
+    pass
+
 
 Action.hook()
