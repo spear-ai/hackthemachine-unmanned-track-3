@@ -3,12 +3,11 @@ import math
 import os
 from pathlib import Path
 from typing import List
-import imageio
 import numpy as np
 # from neural_mmo.forge.blade.core import terrain
 import xarray as xr
 
-nc_file = 'data/grid003_100km_26x26.nc'
+nc_file = 'data/grid004_010deg_180x180.nc'
 npy_file = nc_file.replace('.nc', '.npy')
 json_file = nc_file.replace('.nc', '.json')
 
@@ -32,18 +31,18 @@ nx = map_shape[1]
 
 for y in range(ny):
     for x in range(nx):
-        if y == 0:
-            encoded_map[y][x] = map_tiles['border']
-            continue
-        if y == ny - 1:
-            encoded_map[y][x] = map_tiles['border']
-            continue
-        if x == 0:
-            encoded_map[y][x] = map_tiles['border']
-            continue
-        if x == nx - 1:
-            encoded_map[y][x] = map_tiles['border']
-            continue
+        # if y == 0:
+        #     encoded_map[y][x] = map_tiles['border']
+        #     continue
+        # if y == ny - 1:
+        #     encoded_map[y][x] = map_tiles['border']
+        #     continue
+        # if x == 0:
+        #     encoded_map[y][x] = map_tiles['border']
+        #     continue
+        # if x == nx - 1:
+        #     encoded_map[y][x] = map_tiles['border']
+        #     continue
         if mask[y][x] == 0:
             encoded_map[y][x] = map_tiles['land']
             continue
