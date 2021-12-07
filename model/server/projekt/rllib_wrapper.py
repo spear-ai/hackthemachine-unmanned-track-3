@@ -25,7 +25,7 @@ from neural_mmo.forge.ethyr.torch.policy import attention
 from neural_mmo.forge.trinity import Env
 from neural_mmo.forge.trinity.dataframe import DataType
 from neural_mmo.forge.trinity.overlay import Overlay, OverlayRegistry
-
+from neural_mmo.forge.blade.lib import utils
 
 ###############################################################################
 # Pytorch model + IO. The pip package contains some submodules
@@ -347,8 +347,29 @@ class RLlibEnv(Env, rllib.MultiAgentEnv):
 
         ent.achievements.update(self.realm, ent)
 
+		#Distance to destination reward
+		
+        point4 = (25, 18)
+
+        init_contraband_destination_distance = utils.l2(
+            ent.spawnPos,
+            point4
+        )
+    
+        contraband_destination_distance = utils.l2(
+            ent.pos,
+            point4
+        )
+        
+        if contraband_destination_distance <= 3:
+            contraband_reward = 5000
+        elif contraband_destination_distance <= init_contraband_destination_distance and contraband_destination_distance > 0:
+            contraband_reward = 10*(1/contraband_destination_distance)
+        else:
+            contraband_reward = 0
+
         alpha = config.TEAM_SPIRIT
-        return alpha*team + (1.0-alpha)*individual
+        return alpha*team + (1.0-alpha)*individual + contraband_reward
 
     def step(self, decisions, preprocess=None, omitDead=False):
         preprocess = {entID for entID in decisions}

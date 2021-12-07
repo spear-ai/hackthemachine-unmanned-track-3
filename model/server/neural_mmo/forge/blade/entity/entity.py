@@ -61,15 +61,19 @@ class History:
         exploration = utils.linf(entity.pos, self.origPos)
         self.exploration = max(exploration, self.exploration)
 
-        contraband_destination_point = (0, 0)  # Hardcoded for now
-        contraband_destination_distance = utils.l2(
-            entity.pos,
-            contraband_destination_point
-        )
-        self.contraband_delivered = 1000 - \
-            (10 * contraband_destination_distance)
+        # Does not work - achievements are never converted to rewards
+        # point1 = (29, 16)
+        # point2 = (29, 17)
+        # point3 = (29, 18)
+        # point4 = (29, 19)
+        # contraband_destinations = [point1, point2, point3, point4]
+        
+        # if entity.history.lastPos in contraband_destinations:
+        #     self.contraband_delivered += 5000
+        # else:
+        #     self.contraband_delivered += 0 
+        # self.timeAlive.increment()
 
-        self.timeAlive.increment()
 
     def packet(self):
         data = {}
@@ -87,7 +91,7 @@ class Base:
         self.name = name + str(iden)
         self.color = color
         r, c = pos
-
+        
         self.r = Static.Entity.R(ent.dataframe, ent.entID, r)
         self.c = Static.Entity.C(ent.dataframe, ent.entID, c)
 
@@ -185,9 +189,21 @@ class Entity:
 
     @property
     def alive(self):
+        # Hard code appoximate destination location to induce death and respawn
+        # point1 = (26, 16)
+        # point2 = (26, 17)
+        # point3 = (26, 18)
+        # point4 = (26, 19)
+        # contraband_destinations = [point1, point2, point3, point4]
+        point4 = (25,18)
+        contraband_destination_distance = utils.l2(
+            self.pos,
+            point4
+        )
         if self.resources.health.empty:
             return False
-
+        elif contraband_destination_distance <=3:
+            return False
         return True
 
     @property

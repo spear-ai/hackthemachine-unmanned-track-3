@@ -4,7 +4,7 @@ from pdb import set_trace as T
 class Tier:
     EASY = 4
     NORMAL = 10
-    HARD = 25
+    HARD = 2000
 
 
 class Diary:
@@ -65,11 +65,9 @@ class Achievement:
     def update(self, value, dry):
         if value <= self.progress:
             return 0
-
         # Progress to score conversion
         old = self.score(self.progress)
         new = self.score(value)
-
         if not dry:
             self.progress = value
 
@@ -78,11 +76,11 @@ class Achievement:
 
 class ContrabandDelivered(Achievement):
     def __init__(self, config):
-        super().__init__(easy=config.CONTRABAND_DELIVERED_EASY,
-                         normal=config.CONTRABAND_DELIVERED_NORMAL,
-                         hard=config.CONTRABAND_DELIVERED_HARD)
+        super().__init__(hard=config.CONTRABAND_DELIVERED_HARD)
 
     def update(self, realm, entity, dry):
+        # if entity.history.contraband_delivered > 0:
+        #     print(entity.history.contraband_delivered)
         return super().update(entity.history.contraband_delivered, dry)
 
 

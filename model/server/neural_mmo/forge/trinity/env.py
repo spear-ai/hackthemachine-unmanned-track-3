@@ -345,6 +345,7 @@ class Env:
               The reward for the actions on the previous timestep of the
               entity identified by entID.
         '''
+    
         if entID not in self.realm.players:
             return -1
         return 0

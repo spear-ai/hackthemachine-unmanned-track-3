@@ -41,10 +41,10 @@ class RLlibConfig:
 
     # Training and evaluation settings
     EVALUATION_INTERVAL = 1
-    EVALUATION_NUM_EPISODES = 3
+    EVALUATION_NUM_EPISODES = 1
     EVALUATION_PARALLEL = True
-    TRAINING_ITERATIONS = 8
-    KEEP_CHECKPOINTS_NUM = 3
+    TRAINING_ITERATIONS = 120
+    KEEP_CHECKPOINTS_NUM = 1
     CHECKPOINT_FREQ = 1
     LSTM_BPTT_HORIZON = 2
     NUM_SGD_ITER = 1
@@ -58,8 +58,9 @@ class RLlibConfig:
 
     # Reward
     TEAM_SPIRIT = 0.0
-    ACHIEVEMENT_SCALE = 1.0/15.0
-
+    ACHIEVEMENT_SCALE = 15.0/15.0
+    REWARD_ACHIEVEMENT = True
+    COOPERATIVE = False
 
 class PathsConfig:
     # Update paths to use the /model directory.
@@ -85,7 +86,7 @@ class PathsConfig:
     PATH_THEME_PUB = os.path.join(PATH_THEMES, 'index_publication.html')
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
 
-
+#class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
 class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
     # Various model training settings
     NUM_WORKERS = 1
@@ -94,8 +95,8 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
     SGD_MINIBATCH_SIZE = 32
 
     # The number of time steps an agent looks into the future to maximize their reward
-    TRAIN_HORIZON = 10
-    EVALUATION_HORIZON = 10
+    TRAIN_HORIZON = 200
+    EVALUATION_HORIZON = 50
 
     # We only train on one map and a *duplicate* evaluation map is a duplicate
     TERRAIN_EVAL_MAPS = 1
@@ -145,12 +146,14 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # The default map size is 72×72 (excluding the border)
-    TERRAIN_CENTER = 72
+    TERRAIN_CENTER = 96
 
     NENT = 4  # The number of agents that spawn
     NMOB = 0  # The number of NPCs that spawn
     NPOP = 1  # The number of teams
     PLAYER_SPAWN_ATTEMPTS = 1
+
+    COOPERATIVE = False
 
     # Agents run out of food/water and take damage from hunger/thirst.
     # Therefore, increasing their health also increases their range.
@@ -159,6 +162,7 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     # Reward the agent for achievements such as:
     # * Move contraband closer to its destination
     REWARD_ACHIEVEMENT = True
+    ACHIEVEMENT_SCALE = 15.0/15.0
 
 
 class LargeMaps(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
