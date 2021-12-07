@@ -112,10 +112,14 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
 
     @property
+    def PATH_MAP_DATASETS(self):
+        return os.path.join(self.PATH_ENVIRONMENT, 'generated')
+
+    @property
     def PATH_MAPS(self):
         return os.path.join(
-            self.PATH_ENVIRONMENT,
-            f'generated/{self.TERRAIN_SIZE}x{self.TERRAIN_SIZE}'
+            self.PATH_MAP_DATASETS,
+            f'{self.TERRAIN_SIZE}x{self.TERRAIN_SIZE}'
         )
 
     PATH_MAPS_LARGE = PATH_MAPS  # We distinguish maps by size, not by "large" or "small"
@@ -147,6 +151,9 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
             random_southern_port[0]
         ]
         return random_southern_port
+
+    WANDB_API_KEY = os.environ.get('WANDB_API_KEY')
+    WANDB_API_KEY_FILE = '.wandb_api_key'
 
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):

@@ -109,10 +109,17 @@ def run_tune_experiment(config):
         'train_batch_size': config.TRAIN_BATCH_SIZE
     }
 
+    wandb_options = {}
+
+    if config.WANDB_API_KEY is None:
+        wandb_options['api_key_file'] = config.WANDB_API_KEY_FILE or '.wandb_api_key'
+    else:
+        wandb_options['api_key'] = config.WANDB_API_KEY
+
     tune.run(
         wrapper.RLlibTrainer,
         callbacks=[WandbLoggerCallback(
-            api_key_file='.wandb_api_key',
+            **wandb_options,
             log_config=False,
             project='HACKtheMACHINE'
         )],
@@ -190,11 +197,10 @@ class Anvil():
 
     def train(self, **kwargs):
         '''Train a model using the current --config setting'''
-        print('N_AGENT_OBS:', self.config.N_AGENT_OBS)
         run_tune_experiment(self.config)
 
 
-if __name__ == '__main__':
+def main():
     def Display(lines, out):
         text = "\n".join(lines) + "\n"
         out.write(text)
@@ -202,3 +208,7 @@ if __name__ == '__main__':
     from fire import core
     core.Display = Display
     Fire(Anvil)
+
+
+if __name__ == '__main__':
+    main()
