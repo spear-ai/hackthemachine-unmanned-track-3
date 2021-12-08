@@ -1,0 +1,16 @@
+{
+  "1": {
+    "description": "The Panga is a type of modest-sized, open, outboard-powered, fishing boat common throughout much of the developing world, including Central America, the Caribbean, parts of Africa, the Middle East, and much of Asia.",
+    "id": 1,
+    "lengthInMeters": [
+      5.8,
+      8.5
+    ],
+    "maxSpeedKilometersPerHour": 65,
+    "name": "Panga",
+    "weightCapacityInTons": [
+      1,
+      5
+    ]
+  }
+}

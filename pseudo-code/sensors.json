@@ -1,0 +1,9 @@
+{
+  "1": {
+    "powerConsumptionInWatts": 100,
+    "id": 1,
+    "name": "Cool Sensor XR-300",
+    "type": "Radar",
+    "weightInKilograms": 1
+  }
+}
