@@ -72,6 +72,7 @@ class PathsConfig:
     PATH_RESOURCE = os.path.join(PATH_ROOT, 'server/resources')
     PATH_ASSETS = os.path.join(PATH_RESOURCE, 'assets')
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
+    PATH_ENVIRONMENT_GENERATED = PATH_ENVIRONMENT
     PATH_MAPS_SMALL = os.path.join(PATH_RESOURCE, 'maps/procedural-small')
     PATH_MAPS_LARGE = os.path.join(PATH_RESOURCE, 'maps/procedural-large')
     PATH_MAPS = PATH_MAPS_LARGE
@@ -84,6 +85,7 @@ class PathsConfig:
     )
     PATH_THEME_PUB = os.path.join(PATH_THEMES, 'index_publication.html')
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
+    EXPERIMENT_DIR = os.path.join(PATH_ROOT, 'server/experiments')
 
 
 class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
@@ -95,7 +97,7 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
 
     # Various model training settings
     NUM_WORKERS = 1
-    TRAIN_BATCH_SIZE = 16 * 256 * NUM_WORKERS
+    TRAIN_BATCH_SIZE = 64 * 256 * NUM_WORKERS
     ROLLOUT_FRAGMENT_LENGTH = 256
     SGD_MINIBATCH_SIZE = 32
 
@@ -110,15 +112,12 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.c
     # Update path settings
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../../..'))
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
-
-    @property
-    def PATH_MAP_DATASETS(self):
-        return os.path.join(self.PATH_ENVIRONMENT, 'generated')
+    PATH_ENVIRONMENT_GENERATED = os.path.join(PATH_ENVIRONMENT, 'generated')
 
     @property
     def PATH_MAPS(self):
         return os.path.join(
-            self.PATH_MAP_DATASETS,
+            self.PATH_ENVIRONMENT_GENERATED,
             f'{self.TERRAIN_SIZE}x{self.TERRAIN_SIZE}'
         )
 

@@ -19,12 +19,6 @@ export class SagemakerStack extends cdk.Stack {
 
     const { isSandbox } = properties.env;
 
-    const sagemakerS3Bucket = new cdkS3.Bucket(this, 'sagemakerS3Bucket', {
-      autoDeleteObjects: isSandbox,
-      removalPolicy: isSandbox ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
-      versioned: true,
-    });
-
     const sagemakerIamRole = new cdkIam.Role(this, 'sagemakerIamRole', {
       assumedBy: new cdkIam.ServicePrincipal('sagemaker.amazonaws.com'),
       managedPolicies: [
@@ -32,13 +26,26 @@ export class SagemakerStack extends cdk.Stack {
       ],
     });
 
-    sagemakerS3Bucket.grantReadWrite(sagemakerIamRole);
+    const environmentDataS3Bucket = new cdkS3.Bucket(this, 'environmentDataS3Bucket', {
+      autoDeleteObjects: isSandbox,
+      removalPolicy: isSandbox ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
+      versioned: true,
+    });
 
     new cdkS3Deployment.BucketDeployment(this, 'environmentDataS3Files', {
-      destinationBucket: sagemakerS3Bucket,
-      destinationKeyPrefix: 'environment',
+      destinationBucket: environmentDataS3Bucket,
       sources: [cdkS3Deployment.Source.asset(path.join(__dirname, '../../model/environment/generated'))],
     });
+
+    environmentDataS3Bucket.grantReadWrite(sagemakerIamRole);
+
+    const modelS3Bucket = new cdkS3.Bucket(this, 'modelS3Bucket', {
+      autoDeleteObjects: isSandbox,
+      removalPolicy: isSandbox ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
+      versioned: true,
+    });
+
+    modelS3Bucket.grantReadWrite(sagemakerIamRole);
 
     const sagemakerAlgorithmDockerImage = new cdkEcrAssets.DockerImageAsset(this, 'sagemakerAlgorithmDockerImage', {
       directory: path.join(__dirname, '../..'),
@@ -54,6 +61,21 @@ export class SagemakerStack extends cdk.Stack {
       src: new cdkEcrDeployment.DockerImageName(
         sagemakerAlgorithmDockerImage.imageUri,
       ),
+    });
+
+    new cdk.CfnOutput(this, 'environmentDataS3Path', {
+      description: 'Environmental data S3 Bucket URL',
+      value: `${environmentDataS3Bucket.s3UrlForObject()}`,
+    });
+
+    new cdk.CfnOutput(this, 'modelCheckpointsS3Path', {
+      description: 'Model checkpoints S3 Bucket URL',
+      value: `${modelS3Bucket.s3UrlForObject('checkpoints')}`,
+    });
+
+    new cdk.CfnOutput(this, 'modelOutputS3Path', {
+      description: 'Model output S3 Bucket URL',
+      value: `${modelS3Bucket.s3UrlForObject('output')}`,
     });
 
     new cdk.CfnOutput(this, 'sagemakerAlgorithmDockerImageUri', {

@@ -1,10 +1,10 @@
 import * as AWS from 'aws-sdk';
-import outputs from '../../cdk.outputs.json';
+import { hackTheMachineUnmannedTrack3 as outputs } from '../../cdk.outputs.json';
 import { algorithmName, region } from './settings';
 
 const sagemaker = new AWS.SageMaker({ region });
 
-const options: AWS.SageMaker.CreateAlgorithmInput = {
+const createOptions: AWS.SageMaker.CreateAlgorithmInput = {
   AlgorithmDescription: 'HACKtheMACHINE: Unmanned Track 3 reinforcement learning algorithm with neural-mmo.',
   AlgorithmName: algorithmName,
   CertifyForMarketplace: false,
@@ -19,12 +19,25 @@ const options: AWS.SageMaker.CreateAlgorithmInput = {
     SupportedHyperParameters: [
       // Set all hyperparameters to `isTunable=false` until we can parse metrics from stdout.
       {
-        DefaultValue: 'EastPacificOcean',
+        Description: 'The number of iterations between each checkpoint save.',
+        IsRequired: false,
+        IsTunable: false,
+        Name: 'checkpoint-save-frequency',
+        Type: 'Integer',
+      },
+      {
         Description: 'The name of the configuration file to use.',
-        IsRequired: true,
+        IsRequired: false,
         IsTunable: false,
         Name: 'config-file-name',
         Type: 'FreeText',
+      },
+      {
+        Description: 'The default ratio of training workers to evaluation workers. Used to set default values for `training-worker-count` and `evaluation-worker-count`.',
+        IsRequired: false,
+        IsTunable: false,
+        Name: 'default-worker-ratio',
+        Type: 'Continuous',
       },
       {
         Description: 'The embedding layer size.',
@@ -108,9 +121,31 @@ const options: AWS.SageMaker.CreateAlgorithmInput = {
         Type: 'Integer',
       },
       {
+        Description: 'The LSTM’s sequence length or horizon.',
+        IsRequired: false,
+        IsTunable: false,
+        // IsTunable: true,
+        Name: 'lstm-horizon',
+        Range: {
+          IntegerParameterRangeSpecification: {
+            MaxValue: '512',
+            MinValue: '1'
+          }
+        },
+        Type: 'Integer'
+      },
+      {
+        Description: 'The maximum number of checkpoints saved.',
+        IsRequired: false,
+        IsTunable: false,
+        Name: 'max-checkpoints-saved',
+        Type: 'Integer',
+      },
+      {
         Description: 'The rollout fragment length divides episodes into fragments.',
         IsRequired: false,
         IsTunable: false,
+        // IsTunable: true,
         Name: 'rollout-fragment-length',
         Range: {
           IntegerParameterRangeSpecification: {
@@ -165,7 +200,7 @@ const options: AWS.SageMaker.CreateAlgorithmInput = {
         IsRequired: false,
         IsTunable: false,
         // IsTunable: true,
-        Name: 'training-iteration-acount',
+        Name: 'training-iteration-count',
         Range: {
           IntegerParameterRangeSpecification: {
             MaxValue: '100000',
@@ -188,12 +223,25 @@ const options: AWS.SageMaker.CreateAlgorithmInput = {
         Type: 'Integer'
       },
       {
+        Description: 'The verbosity mode of model training logs.',
+        IsRequired: false,
+        IsTunable: false,
+        Name: 'training-verbosity',
+        Range: {
+          IntegerParameterRangeSpecification: {
+            MaxValue: '3',
+            MinValue: '0'
+          }
+        },
+        Type: 'Integer'
+      },
+      {
         Description: 'The API key used to send logs to WandB.',
         IsRequired: true,
         IsTunable: false,
         Name: 'wandb-api-key',
         Type: 'FreeText',
-      },
+      }
     ],
     SupportedTrainingInstanceTypes: [
       'ml.c4.2xlarge',
@@ -204,6 +252,12 @@ const options: AWS.SageMaker.CreateAlgorithmInput = {
       'ml.c5.2xlarge',
       'ml.c5.4xlarge',
       'ml.c5.9xlarge',
+      'ml.g4dn.12xlarge',
+      'ml.g4dn.16xlarge',
+      'ml.g4dn.2xlarge',
+      'ml.g4dn.4xlarge',
+      'ml.g4dn.8xlarge',
+      'ml.g4dn.xlarge',
       'ml.m4.10xlarge',
       'ml.m4.16xlarge',
       'ml.m4.2xlarge',
@@ -233,14 +287,28 @@ const options: AWS.SageMaker.CreateAlgorithmInput = {
       SupportedContentTypes: [],
       SupportedInputModes: ['File'],
     }],
-    TrainingImage: outputs.hackTheMachineUnmannedTrack3.sagemakerAlgorithmDockerImageUri,
+    TrainingImage: outputs.sagemakerAlgorithmDockerImageUri,
   },
 };
 
-sagemaker.createAlgorithm(options, (error, data) => {
-  if (error) {
-    console.error(error, error.stack);
-  } else {
-    console.log(data);
+const run = async () => {
+  try {
+    console.log('Removing old algorithm…'); // eslint-disable-line no-console
+    await sagemaker.deleteAlgorithm({ AlgorithmName: algorithmName }).promise();
+    console.log('Removed old algorithm');
+  } catch (error) {
+    console.error(error);
+    console.log('No algorithm to remove');
   }
-});
+
+  console.log('Adding new algorithm…'); // eslint-disable-line no-console
+
+  try {
+    const data = await sagemaker.createAlgorithm(createOptions).promise();
+    console.log('Added new algorithm:', JSON.stringify(data, null, 2)); // eslint-disable-line no-console
+  } catch (error) {
+    console.error(error); // eslint-disable-line no-console
+  }
+};
+
+run();

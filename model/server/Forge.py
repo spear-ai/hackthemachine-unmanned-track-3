@@ -127,10 +127,7 @@ def run_tune_experiment(config):
         checkpoint_freq=config.CHECKPOINT_FREQ,
         config=rllib_config,
         keep_checkpoints_num=config.KEEP_CHECKPOINTS_NUM,
-        local_dir=os.path.normpath(os.path.join(
-            __file__,
-            '../experiments'
-        )),
+        local_dir=config.EXPERIMENT_DIR,
         name=config.__class__.__name__,
         progress_reporter=ConsoleLog(),
         restore=config.RESTORE,

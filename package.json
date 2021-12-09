@@ -9,9 +9,8 @@
     "model:train": "poetry run python model/server/Forge.py train --config=CompetitionRound1 --RENDER=True",
     "model:ui": "./client/run.sh",
     "patch:python:ray": "poetry run python model/ray/patch.py",
-    "sagemaker:algorithm:create": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/sagemaker-algorithm/create.ts --extension ts",
-    "sagemaker:algorithm:delete": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/sagemaker-algorithm/delete.ts --extension ts",
-    "sagemaker:algorithm:describe": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/sagemaker-algorithm/describe.ts --extension ts"
+    "sagemaker:algorithm:describe": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/sagemaker-algorithm/describe.ts --extension ts",
+    "sagemaker:algorithm:update": "node --experimental-json-modules --experimental-specifier-resolution node --loader ts-node/esm.mjs --no-warnings infrastructure/sagemaker-algorithm/update.ts --extension ts"
   },
   "dependencies": {
     "@aws-cdk/aws-ecr-assets": "1.132.0",
