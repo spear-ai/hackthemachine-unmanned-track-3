@@ -30,8 +30,6 @@ RUN npm install -g yarn
 
 # Install Pyenv (python version manager)
 RUN \
-  apt-get update && \
-  apt-get upgrade && \
   apt-get install -y python3-venv && \
   curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
 
@@ -42,13 +40,8 @@ RUN cat pyenv.sh >> $HOME/.bashrc && echo '' >> $HOME/.bashrc && rm pyenv.sh
 
 # Install Poetry (python package manager)
 RUN \
-  apt-get update && \
-  apt-get upgrade && \
   apt-get install -y python3-dev tk-dev && \
   curl -sSL https://install.python-poetry.org | python3
 
 # Install Pip globally for VSCode extensions
-RUN \
-  apt-get update && \
-  apt-get upgrade && \
-  apt-get install -y python3-pip
+RUN apt-get install -y python3-pip

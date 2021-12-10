@@ -1,10 +1,11 @@
 import * as cdk from '@aws-cdk/core';
-import * as cdkEc2 from '@aws-cdk/aws-ec2';
+import * as cdkEcr from '@aws-cdk/aws-ecr';
+import * as cdkEcrAssets from '@aws-cdk/aws-ecr-assets';
 import * as cdkIam from '@aws-cdk/aws-iam';
 import * as cdkS3 from '@aws-cdk/aws-s3';
-import * as cdkSagemaker from '@aws-cdk/aws-sagemaker';
-import * as cdkStepfunctions from '@aws-cdk/aws-stepfunctions';
-import * as cdkStepfunctionsTasks from '@aws-cdk/aws-stepfunctions-tasks';
+import * as cdkS3Deployment from '@aws-cdk/aws-s3-deployment';
+import * as cdkEcrDeployment from 'cdk-ecr-deployment';
+import path from 'path';
 
 export interface SagemakerStackProperties extends cdk.StackProps {
   env: cdk.StackProps['env'] & {
@@ -18,12 +19,6 @@ export class SagemakerStack extends cdk.Stack {
 
     const { isSandbox } = properties.env;
 
-    const sagemakerS3Bucket = new cdkS3.Bucket(this, 'sagemakerS3Bucket', {
-      autoDeleteObjects: isSandbox,
-      removalPolicy: isSandbox ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
-      versioned: true,
-    });
-
     const sagemakerIamRole = new cdkIam.Role(this, 'sagemakerIamRole', {
       assumedBy: new cdkIam.ServicePrincipal('sagemaker.amazonaws.com'),
       managedPolicies: [
@@ -31,55 +26,61 @@ export class SagemakerStack extends cdk.Stack {
       ],
     });
 
-    sagemakerS3Bucket.grantReadWrite(sagemakerIamRole);
+    const environmentDataS3Bucket = new cdkS3.Bucket(this, 'environmentDataS3Bucket', {
+      autoDeleteObjects: isSandbox,
+      removalPolicy: isSandbox ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
+      versioned: true,
+    });
 
-    const sagemakerTrainingJob = new cdkStepfunctionsTasks.SageMakerCreateTrainingJob(
-      this,
-      'sagemakerTrainingJob',
-      {
-        algorithmSpecification: {
-          algorithmName: 'example-hackthemachine-unmanned-track-3-neural-mmo-v2',
-          trainingInputMode: cdkStepfunctionsTasks.InputMode.FILE,
-        },
-        inputDataConfig: [{
-          channelName: 'environmental_data',
-          dataSource: {
-            s3DataSource: {
-              s3DataType: cdkStepfunctionsTasks.S3DataType.S3_PREFIX,
-              s3Location: cdkStepfunctionsTasks.S3Location.fromBucket(
-                sagemakerS3Bucket,
-                'environment/test',
-              ),
-            },
-          },
-        }],
-        outputDataConfig: {
-          s3OutputLocation: cdkStepfunctionsTasks.S3Location.fromBucket(
-            sagemakerS3Bucket,
-            'training-jobs',
-          ),
-        },
-        resourceConfig: {
-          instanceCount: 1,
-          instanceType: new cdkEc2.InstanceType(
-            // cdkStepfunctions.JsonPath.stringAt('$.instanceType'),
-            'ml.m4.xlarge',
-          ),
-          volumeSize: cdk.Size.gibibytes(32),
-        },
-        stoppingCondition: {
-          maxRuntime: cdk.Duration.minutes(10),
-        },
-        trainingJobName: cdkStepfunctions.JsonPath.stringAt(
-          '$.trainingJobName',
-          // 'hackthemachine-unmanned-track-3-neural-mmo-v2-1',
-        ),
-      },
-    );
+    new cdkS3Deployment.BucketDeployment(this, 'environmentDataS3Files', {
+      destinationBucket: environmentDataS3Bucket,
+      sources: [cdkS3Deployment.Source.asset(path.join(__dirname, '../../model/environment/generated'))],
+    });
 
-    new cdkStepfunctions.StateMachine(this, 'stateMachine', {
-      definition: sagemakerTrainingJob,
-      role: sagemakerIamRole,
+    environmentDataS3Bucket.grantReadWrite(sagemakerIamRole);
+
+    const modelS3Bucket = new cdkS3.Bucket(this, 'modelS3Bucket', {
+      autoDeleteObjects: isSandbox,
+      removalPolicy: isSandbox ? cdk.RemovalPolicy.DESTROY : cdk.RemovalPolicy.RETAIN,
+      versioned: true,
+    });
+
+    modelS3Bucket.grantReadWrite(sagemakerIamRole);
+
+    const sagemakerAlgorithmDockerImage = new cdkEcrAssets.DockerImageAsset(this, 'sagemakerAlgorithmDockerImage', {
+      directory: path.join(__dirname, '../..'),
+      file: 'Dockerfile.sagemaker',
+    });
+
+    const sagemakerEcrRepository = new cdkEcr.Repository(this, 'sagemakerEcrRepository');
+
+    new cdkEcrDeployment.ECRDeployment(this, 'sagemakerAlgorithmDockerImageDeployment', {
+      dest: new cdkEcrDeployment.DockerImageName(
+        `${sagemakerEcrRepository.repositoryUri}:algorithm-neural-mmo`,
+      ),
+      src: new cdkEcrDeployment.DockerImageName(
+        sagemakerAlgorithmDockerImage.imageUri,
+      ),
+    });
+
+    new cdk.CfnOutput(this, 'environmentDataS3Path', {
+      description: 'Environmental data S3 Bucket URL',
+      value: `${environmentDataS3Bucket.s3UrlForObject()}`,
+    });
+
+    new cdk.CfnOutput(this, 'modelCheckpointsS3Path', {
+      description: 'Model checkpoints S3 Bucket URL',
+      value: `${modelS3Bucket.s3UrlForObject('checkpoints')}`,
+    });
+
+    new cdk.CfnOutput(this, 'modelOutputS3Path', {
+      description: 'Model output S3 Bucket URL',
+      value: `${modelS3Bucket.s3UrlForObject('output')}`,
+    });
+
+    new cdk.CfnOutput(this, 'sagemakerAlgorithmDockerImageUri', {
+      description: 'Neural MMO Sagemaker algorithm Docker Image URI',
+      value: `${sagemakerEcrRepository.repositoryUri}:algorithm-neural-mmo`,
     });
   }
 }
