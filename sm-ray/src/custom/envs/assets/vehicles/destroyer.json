@@ -1,0 +1,29 @@
+{
+    "name": "destroyer",
+    "details": {
+        "description": "xxx",
+        "make": "xx",
+        "model": "",
+        "possible_sensors": [
+            "visual",
+            "radar"
+        ]
+    },
+    "options": {
+        "width": 1,
+        "length": 2,
+        "hp": 10,
+        "speed": 2,
+        "view_distance": 6,
+        "view_shape": "circle",
+        "attack_distance": 1,
+        "attack_shape": "circle",
+        "damage": 2,
+        "step_recover": -0.1,
+        "attack_in_group": true,
+        "step_reward": 0.1,
+        "dead_penalty": 0.1,
+        "attack_penalty": 0.1,
+        "kill_supply": 0
+    }
+}

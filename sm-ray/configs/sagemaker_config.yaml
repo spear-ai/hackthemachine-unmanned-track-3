@@ -1,0 +1,2 @@
+S3_BUCKET: ""
+CPU_TRAINING_INSTANCE: 'ml.p3.2xlarge'
