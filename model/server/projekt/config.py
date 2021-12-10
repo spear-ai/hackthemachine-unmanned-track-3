@@ -26,10 +26,10 @@ class RLlibConfig:
     RESTORE = None
 
     # Policy specification
-    AGENTS = [Agent]
-    EVAL_AGENTS = [baselines.Meander,
-                   baselines.Forage, baselines.Combat, Agent]
-    EVALUATE = False  # Reserved param
+    AGENTS = [Agent, Agent]
+    EVAL_AGENTS = [baselines.Combat, Agent] # Must have multiple different eval agents to work
+    #[baselines.Meander, baselines.Forage, baselines.Combat, Agent]
+    EVALUATE = True  # Reserved param 
 
     #Hardware and debug
     NUM_WORKERS = 1
@@ -43,7 +43,7 @@ class RLlibConfig:
     EVALUATION_INTERVAL = 1
     EVALUATION_NUM_EPISODES = 1
     EVALUATION_PARALLEL = True
-    TRAINING_ITERATIONS = 120
+    TRAINING_ITERATIONS = 380
     KEEP_CHECKPOINTS_NUM = 1
     CHECKPOINT_FREQ = 1
     LSTM_BPTT_HORIZON = 2
@@ -60,7 +60,7 @@ class RLlibConfig:
     TEAM_SPIRIT = 0.0
     ACHIEVEMENT_SCALE = 15.0/15.0
     REWARD_ACHIEVEMENT = True
-    COOPERATIVE = False
+
 
 class PathsConfig:
     # Update paths to use the /model directory.
@@ -88,8 +88,8 @@ class PathsConfig:
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
     EXPERIMENT_DIR = os.path.join(PATH_ROOT, 'server/experiments')
 
-#class DefaultConfig(RLlibConfig, PathsConfig, core.config.AllGameSystems, core.config.Config):
-class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
+class DefaultConfig(RLlibConfig, PathsConfig, core.config.Resource, core.config.Config):
+#class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
     # Various model training settings
     NUM_WORKERS = 1
     TRAIN_BATCH_SIZE = 64 * 256 * NUM_WORKERS
@@ -134,17 +134,36 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
         return self.CACHED_ENVIRONMENT_DATA
 
     @property
-    def SPAWN(self):
-        return self.SPAWN_HANDLER
+    def SPAWN_RED(self):
+        return self.SPAWN_HANDLER_RED
 
-    def SPAWN_HANDLER(self):
+    @property
+    def SPAWN_BLUE(self):
+        return self.SPAWN_HANDLER_BLUE
+
+    def SPAWN_HANDLER_RED(self):
         southern_port_list = self.ENVIRONMENT_DATA['southern_port_list']
         random_southern_port = random.choice(southern_port_list)
+
+        #Panga spawn locations
         random_southern_port = [
             random_southern_port[1],
             random_southern_port[0]
         ]
         return random_southern_port
+
+    def SPAWN_HANDLER_BLUE(self):
+        # northern_port_list = self.ENVIRONMENT_DATA['northern_port_list']
+        # json needs to be edited to work with northern_port_list - I think?
+        northern_port_list = [(60,60), (65,65), (60, 65), (65, 60)]
+        random_northern_port = random.choice(northern_port_list)
+
+        #Temporary blue team spawn
+        random_northern_port = [
+            random_northern_port[1],
+            random_northern_port[0]
+        ]
+        return random_northern_port
 
     WANDB_API_KEY = os.environ.get('WANDB_API_KEY')
     WANDB_API_KEY_FILE = '.wandb_api_key'
@@ -156,15 +175,17 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
 
     NENT = 4  # The number of agents that spawn
     NMOB = 0  # The number of NPCs that spawn
-    NPOP = 1  # The number of teams
+    NPOP = 2  # The number of teams
     PLAYER_SPAWN_ATTEMPTS = 1
+    AGENT_LOADER = core.config.TeamLoader # For team populations to work
+    AGENTS = NPOP*[Agent]
 
-    COOPERATIVE = False
+    COOPERATIVE = True
 
     # Agents run out of food/water and take damage from hunger/thirst.
-    # Therefore, increasing their health also increases their range.
-    BASE_HEALTH = 99  # Must be less than 100
-
+    # Therefore, increasing their health also increases their range, max ~150
+    BASE_HEALTH = 75  # change range in experience.py
+    RESOURCE_BASE_RESOURCE = 150 # change range in experience.py
     # Reward the agent for achievements such as:
     # * Move contraband closer to its destination
     REWARD_ACHIEVEMENT = True
