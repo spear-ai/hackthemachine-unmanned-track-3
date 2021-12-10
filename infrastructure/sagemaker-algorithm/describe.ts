@@ -1,17 +1,16 @@
 import * as AWS from 'aws-sdk';
+import { algorithmName, region } from './settings';
 
-const sagemaker = new AWS.SageMaker({
-  region: 'us-east-1',
-});
+const sagemaker = new AWS.SageMaker({ region });
 
 const options: AWS.SageMaker.DescribeAlgorithmInput = {
-  AlgorithmName: 'example-hackthemachine-unmanned-track-3-neural-mmo-v2',
+  AlgorithmName: algorithmName,
 };
 
 sagemaker.describeAlgorithm(options, (error, data) => {
   if (error) {
     console.error(error, error.stack);
   } else {
-    console.log(data);
+    console.log(JSON.stringify(data, null, 2));
   }
 });

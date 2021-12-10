@@ -73,6 +73,7 @@ class PathsConfig:
     PATH_RESOURCE = os.path.join(PATH_ROOT, 'server/resources')
     PATH_ASSETS = os.path.join(PATH_RESOURCE, 'assets')
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
+    PATH_ENVIRONMENT_GENERATED = PATH_ENVIRONMENT
     PATH_MAPS_SMALL = os.path.join(PATH_RESOURCE, 'maps/procedural-small')
     PATH_MAPS_LARGE = os.path.join(PATH_RESOURCE, 'maps/procedural-large')
     PATH_MAPS = PATH_MAPS_LARGE
@@ -85,6 +86,7 @@ class PathsConfig:
     )
     PATH_THEME_PUB = os.path.join(PATH_THEMES, 'index_publication.html')
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
+    EXPERIMENT_DIR = os.path.join(PATH_ROOT, 'server/experiments')
 
 class DefaultConfig(RLlibConfig, PathsConfig, core.config.Resource, core.config.Config):
 #class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
@@ -105,12 +107,13 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Resource, core.config.
     # Update path settings
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../../..'))
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
+    PATH_ENVIRONMENT_GENERATED = os.path.join(PATH_ENVIRONMENT, 'generated')
 
     @property
     def PATH_MAPS(self):
         return os.path.join(
-            self.PATH_ENVIRONMENT,
-            f'generated/{self.TERRAIN_SIZE}x{self.TERRAIN_SIZE}'
+            self.PATH_ENVIRONMENT_GENERATED,
+            f'{self.TERRAIN_SIZE}x{self.TERRAIN_SIZE}'
         )
 
     PATH_MAPS_LARGE = PATH_MAPS  # We distinguish maps by size, not by "large" or "small"
@@ -161,6 +164,9 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Resource, core.config.
             random_northern_port[0]
         ]
         return random_northern_port
+
+    WANDB_API_KEY = os.environ.get('WANDB_API_KEY')
+    WANDB_API_KEY_FILE = '.wandb_api_key'
 
 
 class EastPacificOcean(core.config.Achievement, DefaultConfig):

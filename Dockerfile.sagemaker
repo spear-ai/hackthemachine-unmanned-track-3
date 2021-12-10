@@ -1,0 +1,34 @@
+FROM 763104351884.dkr.ecr.us-east-1.amazonaws.com/pytorch-training:1.10.0-gpu-py38-cu113-ubuntu20.04-sagemaker
+
+ENV PATH="/opt/ml/code:${PATH}"
+
+# This environment variable is used by the SageMaker PyTorch container to determine our user code directory
+ENV SAGEMAKER_SUBMIT_DIRECTORY="/opt/ml/code"
+
+# /opt/ml and all subdirectories are utilized by SageMaker, use the /code subdirectory to store your user code
+WORKDIR /opt/ml/code
+
+# Update apt-get
+RUN apt-get update && apt-get upgrade -y
+
+# Install Poetry (python package manager)
+ENV POETRY_NO_INTERACTION=1
+ENV POETRY_VIRTUALENVS_CREATE=false
+RUN pip install poetry
+
+# Install Python dependencies
+COPY poetry.lock pyproject.toml ./
+RUN poetry install
+
+# Patch Ray library python dependency
+COPY model/ray/ model/ray/
+RUN python model/ray/patch.py
+
+# Copy Neural MMO model to code directory
+COPY /model/server/ model/server/
+
+# Defines model/server/Forge.py as script entry point 
+ENV SAGEMAKER_PROGRAM="model/server/sagemaker_job.py"
+
+# Reset working directory
+WORKDIR /
