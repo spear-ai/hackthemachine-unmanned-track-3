@@ -42,6 +42,7 @@ class TeamLoader:
     def __next__(self):
         self.idx += 1
         team_idx = self.idx // self.team_size
+        #print(team_idx)
         return team_idx, self.items[team_idx]
 
 

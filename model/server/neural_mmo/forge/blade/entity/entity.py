@@ -202,7 +202,7 @@ class Entity:
         )
         if self.resources.health.empty:
             return False
-        elif contraband_destination_distance <=3:
+        elif contraband_destination_distance <=2:
             return False
         return True
 

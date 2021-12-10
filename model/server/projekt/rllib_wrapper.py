@@ -364,12 +364,26 @@ class RLlibEnv(Env, rllib.MultiAgentEnv):
         if contraband_destination_distance <= 3:
             contraband_reward = 5000
         elif contraband_destination_distance <= init_contraband_destination_distance and contraband_destination_distance > 0:
-            contraband_reward = 10*(1/contraband_destination_distance)
+            contraband_reward = 100*(1/contraband_destination_distance)
         else:
             contraband_reward = 0
+        
+        #Penalize for being adjacent to the coast(territorial waters) not near the destination
+        adjmats = [x.tex for x in ai.utils.adjacentMats(self.realm.map.tiles, ent.pos)]
+        
+        if 'grass' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
+            around_coast_penalty = -100*(1- 1/contraband_destination_distance)
+        else:
+            around_coast_penalty = 0.0
+
+        #Penalize for being adjacent to the border not near the destination
+        if 'stone' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
+            around_border_penalty = -100
+        else:
+            around_border_penalty = 0
 
         alpha = config.TEAM_SPIRIT
-        return alpha*team + (1.0-alpha)*individual + contraband_reward
+        return alpha*team + (1.0-alpha)*individual + contraband_reward + around_coast_penalty + around_border_penalty
 
     def step(self, decisions, preprocess=None, omitDead=False):
         preprocess = {entID for entID in decisions}
