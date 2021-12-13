@@ -1,186 +1,215 @@
 from pdb import set_trace as T
 import numpy as np
-
-from neural_mmo.forge.blade.systems import skill, droptable, combat, equipment
-from neural_mmo.forge.blade.lib import material, utils
-
-from neural_mmo.forge.blade.io.action import static as Action
+from neural_mmo.forge.blade.systems import combat, equipment
+from neural_mmo.forge.blade.lib import utils
 from neural_mmo.forge.blade.io.stimulus import Static
 
+
 class Resources:
-   def __init__(self, ent):
-      self.health = Static.Entity.Health(ent.dataframe, ent.entID)
-      self.water  = Static.Entity.Water( ent.dataframe, ent.entID)
-      self.food   = Static.Entity.Food(  ent.dataframe, ent.entID)
+    def __init__(self, ent):
+        self.health = Static.Entity.Health(ent.dataframe, ent.entID)
+        self.water = Static.Entity.Water(ent.dataframe, ent.entID)
+        self.food = Static.Entity.Food(ent.dataframe, ent.entID)
 
-   def update(self, realm, entity, actions):
-      self.health.max = entity.skills.constitution.level
-      self.water.max  = entity.skills.fishing.level
-      self.food.max   = entity.skills.hunting.level
+    def update(self, realm, entity, actions):
+        self.health.max = entity.skills.constitution.level
+        self.water.max = entity.skills.fishing.level
+        self.food.max = entity.skills.hunting.level
 
-   def packet(self):
-      data = {}
-      data['health'] = self.health.packet()
-      data['food']   = self.food.packet()
-      data['water']  = self.water.packet()
-      return data
+    def packet(self):
+        data = {}
+        data['health'] = self.health.packet()
+        data['food'] = self.food.packet()
+        data['water'] = self.water.packet()
+        return data
+
 
 class Status:
-   def __init__(self, ent):
-      self.config = ent.config
-      self.freeze     = Static.Entity.Freeze(ent.dataframe, ent.entID)
+    def __init__(self, ent):
+        self.config = ent.config
+        self.freeze = Static.Entity.Freeze(ent.dataframe, ent.entID)
 
-   def update(self, realm, entity, actions):
-      self.freeze.decrement()
+    def update(self, realm, entity, actions):
+        self.freeze.decrement()
 
-   def packet(self):
-      data = {}
-      data['freeze']     = self.freeze.val
-      return data
+    def packet(self):
+        data = {}
+        data['freeze'] = self.freeze.val
+        return data
+
 
 class History:
-   def __init__(self, ent):
-      self.actions = None
-      self.attack  = None
-  
-      self.origPos     = ent.pos
-      self.exploration = 0
-      self.playerKills = 0
+    def __init__(self, ent):
+        self.actions = None
+        self.attack = None
 
-      self.damage    = Static.Entity.Damage(   ent.dataframe, ent.entID)
-      self.timeAlive = Static.Entity.TimeAlive(ent.dataframe, ent.entID)
+        self.origPos = ent.pos
+        self.contraband_delivered = 0
+        self.exploration = 0
+        self.playerKills = 0
 
-      self.lastPos = None
+        self.damage = Static.Entity.Damage(ent.dataframe, ent.entID)
+        self.timeAlive = Static.Entity.TimeAlive(ent.dataframe, ent.entID)
 
-   def update(self, realm, entity, actions):
-      self.attack  = None
-      self.actions = actions
-      self.damage.update(0)
+        self.lastPos = None
 
-      exploration      = utils.linf(entity.pos, self.origPos)
-      self.exploration = max(exploration, self.exploration)
+    def update(self, realm, entity, actions):
+        self.attack = None
+        self.actions = actions
+        self.damage.update(0)
 
-      self.timeAlive.increment()
+        exploration = utils.linf(entity.pos, self.origPos)
+        self.exploration = max(exploration, self.exploration)
 
-   def packet(self):
-      data = {}
-      data['damage']    = self.damage.val
-      data['timeAlive'] = self.timeAlive.val
+        # Does not work - achievements are never converted to rewards
+        # point1 = (29, 16)
+        # point2 = (29, 17)
+        # point3 = (29, 18)
+        # point4 = (29, 19)
+        # contraband_destinations = [point1, point2, point3, point4]
+        
+        # if entity.history.lastPos in contraband_destinations:
+        #     self.contraband_delivered += 5000
+        # else:
+        #     self.contraband_delivered += 0 
+        # self.timeAlive.increment()
 
-      if self.attack is not None:
-         data['attack'] = self.attack
 
-      return data
+    def packet(self):
+        data = {}
+        data['damage'] = self.damage.val
+        data['timeAlive'] = self.timeAlive.val
+
+        if self.attack is not None:
+            data['attack'] = self.attack
+
+        return data
+
 
 class Base:
-   def __init__(self, ent, pos, iden, name, color, pop):
-      self.name  = name + str(iden)
-      self.color = color
-      r, c       = pos
+    def __init__(self, ent, pos, iden, name, color, pop):
+        self.name = name + str(iden)
+        self.color = color
+        r, c = pos
+        
+        self.r = Static.Entity.R(ent.dataframe, ent.entID, r)
+        self.c = Static.Entity.C(ent.dataframe, ent.entID, c)
 
-      self.r          = Static.Entity.R(ent.dataframe, ent.entID, r)
-      self.c          = Static.Entity.C(ent.dataframe, ent.entID, c)
+        self.population = Static.Entity.Population(
+            ent.dataframe, ent.entID, pop)
+        self.self = Static.Entity.Self(ent.dataframe, ent.entID, 1)
+        self.identity = Static.Entity.ID(ent.dataframe, ent.entID, ent.entID)
+        self.level = Static.Entity.Level(ent.dataframe, ent.entID, 3)
 
-      self.population = Static.Entity.Population(ent.dataframe, ent.entID, pop)
-      self.self       = Static.Entity.Self(      ent.dataframe, ent.entID, 1)
-      self.identity   = Static.Entity.ID(        ent.dataframe, ent.entID, ent.entID)
-      self.level      = Static.Entity.Level(     ent.dataframe, ent.entID, 3)
+        ent.dataframe.init(Static.Entity, ent.entID, (r, c))
 
-      ent.dataframe.init(Static.Entity, ent.entID, (r, c))
+    def update(self, realm, entity, actions):
+        self.level.update(combat.level(entity.skills))
 
-   def update(self, realm, entity, actions):
-      self.level.update(combat.level(entity.skills))
+    @property
+    def pos(self):
+        return self.r.val, self.c.val
 
-   @property
-   def pos(self):
-      return self.r.val, self.c.val
+    def packet(self):
+        data = {}
 
-   def packet(self):
-      data = {}
+        data['r'] = self.r.val
+        data['c'] = self.c.val
+        data['name'] = self.name
+        data['color'] = self.color.packet()
+        data['population'] = self.population.val
+        data['self'] = self.self.val
 
-      data['r']          = self.r.val
-      data['c']          = self.c.val
-      data['name']       = self.name
-      data['color']      = self.color.packet()
-      data['population'] = self.population.val
-      data['self']       = self.self.val
+        return data
 
-      return data
 
 class Entity:
-   def __init__(self, realm, pos, iden, name, color, pop):
-      self.dataframe    = realm.dataframe
-      self.config       = realm.config
-      self.entID        = iden
+    def __init__(self, realm, pos, iden, name, color, pop):
+        self.dataframe = realm.dataframe
+        self.config = realm.config
+        self.entID = iden
 
-      self.repr         = None
-      self.vision       = 5
+        self.repr = None
+        self.vision = 5
 
-      self.attacker     = None
-      self.target       = None
-      self.closest      = None
-      self.spawnPos     = pos
+        self.attacker = None
+        self.target = None
+        self.closest = None
+        self.spawnPos = pos
 
-      self.attackerID = Static.Entity.AttackerID(self.dataframe, self.entID, 0)
+        self.attackerID = Static.Entity.AttackerID(
+            self.dataframe, self.entID, 0)
 
-      #Submodules
-      self.base      = Base(self, pos, iden, name, color, pop)
-      self.status    = Status(self)
-      self.history   = History(self)
-      self.resources = Resources(self)
-      self.loadout   = equipment.Loadout()
+        # Submodules
+        self.base = Base(self, pos, iden, name, color, pop)
+        self.status = Status(self)
+        self.history = History(self)
+        self.resources = Resources(self)
+        self.loadout = equipment.Loadout()
 
-   def packet(self):
-      data = {}
+    def packet(self):
+        data = {}
 
-      data['status']  = self.status.packet()
-      data['history'] = self.history.packet()
-      data['loadout'] = self.loadout.packet()
-      data['alive']   = self.alive
+        data['status'] = self.status.packet()
+        data['history'] = self.history.packet()
+        data['loadout'] = self.loadout.packet()
+        data['alive'] = self.alive
 
-      return data
+        return data
 
-   def update(self, realm, actions):
-      '''Update occurs after actions, e.g. does not include history'''
-      if self.history.damage == 0:
-         self.attacker = None
-         self.attackerID.update(0)
+    def update(self, realm, actions):
+        '''Update occurs after actions, e.g. does not include history'''
+        if self.history.damage == 0:
+            self.attacker = None
+            self.attackerID.update(0)
 
-      self.base.update(realm, self, actions)
-      self.status.update(realm, self, actions)
-      self.history.update(realm, self, actions)
+        self.base.update(realm, self, actions)
+        self.status.update(realm, self, actions)
+        self.history.update(realm, self, actions)
 
-   def receiveDamage(self, source, dmg):
-      self.history.damage.update(dmg)
-      self.resources.health.decrement(dmg)
+    def receiveDamage(self, source, dmg):
+        self.history.damage.update(dmg)
+        self.resources.health.decrement(dmg)
 
-      if not self.alive and source:
-         source.receiveLoot(self.loadout)
-         return False
+        if not self.alive and source:
+            source.receiveLoot(self.loadout)
+            return False
 
-      return True
+        return True
 
-   def receiveLoot(self, loadout):
-      pass
+    def receiveLoot(self, loadout):
+        pass
 
-   def applyDamage(self, dmg, style):
-      pass
+    def applyDamage(self, dmg, style):
+        pass
 
-   @property
-   def pos(self):
-      return self.base.pos
+    @property
+    def pos(self):
+        return self.base.pos
 
-   @property
-   def alive(self):
-      if self.resources.health.empty:
-         return False
+    @property
+    def alive(self):
+        # Hard code appoximate destination location to induce death and respawn
+        # point1 = (26, 16)
+        # point2 = (26, 17)
+        # point3 = (26, 18)
+        # point4 = (26, 19)
+        # contraband_destinations = [point1, point2, point3, point4]
+        point4 = (25,18)
+        contraband_destination_distance = utils.l2(
+            self.pos,
+            point4
+        )
+        if self.resources.health.empty:
+            return False
+        elif contraband_destination_distance <=2:
+            return False
+        return True
 
-      return True
+    @property
+    def isPlayer(self) -> bool:
+        return False
 
-   @property
-   def isPlayer(self) -> bool:
-      return False
-
-   @property
-   def isNPC(self) -> bool:
-      return False
+    @property
+    def isNPC(self) -> bool:
+        return False

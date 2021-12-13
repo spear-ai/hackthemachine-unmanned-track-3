@@ -14,7 +14,7 @@ class Player(entity.Entity):
    def __init__(self, realm, pos, agent, pop):
       super().__init__(realm, pos,
             agent.iden, agent.name,
-            enums.Color16.colors[pop], pop)
+            enums.Red_Blue.colors[pop], pop)
 
       self.agent  = agent
       self.pop    = pop

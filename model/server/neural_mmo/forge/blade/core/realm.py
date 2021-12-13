@@ -138,36 +138,70 @@ class PlayerManager(EntityGroup):
         self.agents = self.loader(self.config)
         self.idx = 1
 
-    def spawnIndividual(self, r, c):
+    # def spawnIndividual(self, r, c):
+    #     pop, agent = next(self.agents)
+    #     agent = agent(self.config, self.idx)
+    #     player = Player(self.realm, (r, c), agent, pop)
+    #     super().spawn(player)
+
+    #     self.idx += 1
+
+    def spawnIndividual(self, r1, c1, r2, c2):
         pop, agent = next(self.agents)
         agent = agent(self.config, self.idx)
+
+        if pop == 0:
+            r = r1
+            c = c1
+        elif pop == 1:
+            r = r2
+            c = c2
+        
         player = Player(self.realm, (r, c), agent, pop)
+        #print(f"popuation team: {player.pop}")
         super().spawn(player)
+
         self.idx += 1
 
     def spawn(self):
-        if self.config.SPAWN == self.config.SPAWN_CONCURRENT:
-            if self.spawned:
-                return
+        # if self.config.SPAWN == self.config.SPAWN_CONCURRENT:
+        #     if self.spawned:
+        #         return
+        #     self.spawned = True
+        #     idx = 0
+    
+        #     for r, c in self.config.SPAWN():
+        #         idx += 1
+        #         assert not self.realm.map.tiles[r, c].occupied
+        #         self.spawnIndividual(r, c)
+        #     return
 
-            self.spawned = True
-            idx = 0
-            for r, c in self.config.SPAWN():
-                idx += 1
-                assert not self.realm.map.tiles[r, c].occupied
-                self.spawnIndividual(r, c)
-            return
+        # # MMO-style spawning
+        # for _ in range(self.config.PLAYER_SPAWN_ATTEMPTS):
+        #     #print(f"current number of entities spawned: {len(self.entities)}")
+        #     if len(self.entities) >= self.config.NENT:
+        #         break
+        
+        #     r, c = self.config.SPAWN()
+        #     if self.realm.map.tiles[r, c].occupied:
+        #         continue
 
-        # MMO-style spawning
+        #     self.spawnIndividual(r, c)
+
+        # while len(self.entities) == 0:
+        #     self.spawn()
+
         for _ in range(self.config.PLAYER_SPAWN_ATTEMPTS):
+            #print(f"current number of entities spawned: {len(self.entities)}")
             if len(self.entities) >= self.config.NENT:
                 break
-
-            r, c = self.config.SPAWN()
-            if self.realm.map.tiles[r, c].occupied:
+        
+            r1, c1 = self.config.SPAWN_RED()
+            r2, c2 = self.config.SPAWN_BLUE()
+            if self.realm.map.tiles[r1, c1].occupied or self.realm.map.tiles[r2, c2].occupied:
                 continue
 
-            self.spawnIndividual(r, c)
+            self.spawnIndividual(r1, c1, r2, c2)
 
         while len(self.entities) == 0:
             self.spawn()

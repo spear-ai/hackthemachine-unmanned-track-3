@@ -1,106 +1,125 @@
 from pdb import set_trace as T
 
+
 class Tier:
-   EASY   = 4
-   NORMAL = 10
-   HARD   = 25
+    EASY = 4
+    NORMAL = 10
+    HARD = 2000
+
 
 class Diary:
-   def __init__(self, config):
-      self.achievements = []
+    def __init__(self, config):
+        self.achievements = []
 
-      if config.game_system_enabled('Achievement'):
-         self.achievements = [PlayerKills, Equipment, Exploration, Foraging]
+        if config.game_system_enabled('Achievement'):
+            self.achievements = [
+                ContrabandDelivered,
+                # PlayerKills,
+                # Equipment,
+                # Exploration,
+                # Foraging
+            ]
 
-      self.achievements = [a(config) for a in self.achievements]
+        self.achievements = [a(config) for a in self.achievements]
 
-   @property
-   def stats(self):
-      return [a.stats for a in self.achievements]
+    @property
+    def stats(self):
+        return [a.stats for a in self.achievements]
 
-   def score(self, aggregate=True):
-      score = [a.score() for a in self.achievements]
-      if score and aggregate:
-         return sum(score)
-      return score
+    def score(self, aggregate=True):
+        score = [a.score() for a in self.achievements]
+        if score and aggregate:
+            return sum(score)
+        return score
 
-   def update(self, realm, entity, aggregate=True, dry=False):
-      scores = [a.update(realm, entity, dry) for a in self.achievements]
-      if scores and aggregate:
-         return sum(scores)
-      return scores
+    def update(self, realm, entity, aggregate=True, dry=False):
+        scores = [a.update(realm, entity, dry) for a in self.achievements]
+        if scores and aggregate:
+            return sum(scores)
+        return scores
 
 
 class Achievement:
-   def __init__(self, easy=None, normal=None, hard=None):
-      self.progress = 0
+    def __init__(self, easy=None, normal=None, hard=None):
+        self.progress = 0
 
-      self.easy     = easy
-      self.normal   = normal
-      self.hard     = hard
+        self.easy = easy
+        self.normal = normal
+        self.hard = hard
 
-   @property
-   def stats(self):
-      return self.__class__.__name__, self.progress
+    @property
+    def stats(self):
+        return self.__class__.__name__, self.progress
 
-   def score(self, progress=None):
-      if not progress:
-         progress = self.progress
-      if self.hard and progress >= self.hard:
-         return Tier.HARD
-      elif self.normal and progress >= self.normal:
-         return Tier.NORMAL
-      elif self.easy and progress >= self.easy:
-         return Tier.EASY
-      return 0
+    def score(self, progress=None):
+        if not progress:
+            progress = self.progress
+        if self.hard and progress >= self.hard:
+            return Tier.HARD
+        elif self.normal and progress >= self.normal:
+            return Tier.NORMAL
+        elif self.easy and progress >= self.easy:
+            return Tier.EASY
+        return 0
 
-   def update(self, value, dry):
-      if value <= self.progress:
-         return 0
+    def update(self, value, dry):
+        if value <= self.progress:
+            return 0
+        # Progress to score conversion
+        old = self.score(self.progress)
+        new = self.score(value)
+        if not dry:
+            self.progress = value
 
-      #Progress to score conversion
-      old = self.score(self.progress)
-      new = self.score(value)
+        return new - old
 
-      if not dry:
-         self.progress = value
 
-      return new - old
-      
+class ContrabandDelivered(Achievement):
+    def __init__(self, config):
+        super().__init__(hard=config.CONTRABAND_DELIVERED_HARD)
+
+    def update(self, realm, entity, dry):
+        # if entity.history.contraband_delivered > 0:
+        #     print(entity.history.contraband_delivered)
+        return super().update(entity.history.contraband_delivered, dry)
+
+
 class PlayerKills(Achievement):
-   def __init__(self, config):
-      super().__init__(easy   = config.PLAYER_KILLS_EASY,
-                       normal = config.PLAYER_KILLS_NORMAL,
-                       hard   = config.PLAYER_KILLS_HARD)
+    def __init__(self, config):
+        super().__init__(easy=config.PLAYER_KILLS_EASY,
+                         normal=config.PLAYER_KILLS_NORMAL,
+                         hard=config.PLAYER_KILLS_HARD)
 
-   def update(self, realm, entity, dry):
-      return super().update(entity.history.playerKills, dry)
+    def update(self, realm, entity, dry):
+        return super().update(entity.history.playerKills, dry)
+
 
 class Equipment(Achievement):
-   def __init__(self, config):
-      super().__init__(easy   = config.EQUIPMENT_EASY,
-                       normal = config.EQUIPMENT_NORMAL,
-                       hard   = config.EQUIPMENT_HARD)
+    def __init__(self, config):
+        super().__init__(easy=config.EQUIPMENT_EASY,
+                         normal=config.EQUIPMENT_NORMAL,
+                         hard=config.EQUIPMENT_HARD)
 
-   def update(self, realm, entity, dry):
-      return super().update(entity.loadout.defense, dry)
+    def update(self, realm, entity, dry):
+        return super().update(entity.loadout.defense, dry)
+
 
 class Exploration(Achievement):
-   def __init__(self, config):
-      super().__init__(easy   = config.EXPLORATION_EASY,
-                       normal = config.EXPLORATION_NORMAL,
-                       hard   = config.EXPLORATION_HARD)
+    def __init__(self, config):
+        super().__init__(easy=config.EXPLORATION_EASY,
+                         normal=config.EXPLORATION_NORMAL,
+                         hard=config.EXPLORATION_HARD)
 
-   def update(self, realm, entity, dry):
-      return super().update(entity.history.exploration, dry)
+    def update(self, realm, entity, dry):
+        return super().update(entity.history.exploration, dry)
+
 
 class Foraging(Achievement):
-   def __init__(self, config):
-      super().__init__(easy   = config.FORAGING_EASY,
-                       normal = config.FORAGING_NORMAL,
-                       hard   = config.FORAGING_HARD)
+    def __init__(self, config):
+        super().__init__(easy=config.FORAGING_EASY,
+                         normal=config.FORAGING_NORMAL,
+                         hard=config.FORAGING_HARD)
 
-   def update(self, realm, entity, dry):
-      lvl = (entity.skills.fishing.level + entity.skills.hunting.level)/2.0
-      return super().update(lvl, dry)
-
+    def update(self, realm, entity, dry):
+        lvl = (entity.skills.fishing.level + entity.skills.hunting.level)/2.0
+        return super().update(lvl, dry)

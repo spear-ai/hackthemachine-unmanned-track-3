@@ -42,6 +42,7 @@ class TeamLoader:
     def __next__(self):
         self.idx += 1
         team_idx = self.idx // self.team_size
+        #print(team_idx)
         return team_idx, self.items[team_idx]
 
 
@@ -528,6 +529,11 @@ class Achievement:
     def Achievement(self):
         return True
 
+    # CONTRABAND_DELIVERED_EASY = 32
+    # CONTRABAND_DELIVERED_NORMAL = 64
+    CONTRABAND_DELIVERED_HARD = 2500
+
+    
     PLAYER_KILLS_EASY = 1
     PLAYER_KILLS_NORMAL = 3
     PLAYER_KILLS_HARD = 6

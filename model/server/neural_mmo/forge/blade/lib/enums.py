@@ -138,6 +138,12 @@ class Solid:
               Solid.PINK, Solid.CHARTREUSE, Solid.SKY,
               Solid.GREY)
 
+# Colors for red and blue forces
+class Red_Blue:
+   def make_rb():
+      colors = [Solid.RED, Solid.BLUE]
+      return colors
+   colors = make_rb()
 
 class Palette:
    def __init__(self, n):

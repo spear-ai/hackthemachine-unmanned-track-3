@@ -6,7 +6,7 @@ class ExperienceCalculator:
       self.exp = [0]
       self.tabulateExp()
 
-   def tabulateExp(self, numLevels=99):
+   def tabulateExp(self, numLevels=150):
       for i in range(2, numLevels+1):
          increment = np.floor(i-1 + 300*(2**((i-1)/7.0)))/4.0
          self.exp += [self.exp[-1] + increment]

@@ -3,16 +3,12 @@ from collections import defaultdict
 from tqdm import tqdm
 import numpy as np
 import gym
-import wandb
 import trueskill
-
 import torch
 from torch import nn
 from torch.nn.utils import rnn
-
 from ray import rllib
 from pdb import set_trace as TT
-
 import ray.rllib.agents.ppo.ppo as ppo
 import ray.rllib.agents.ppo.appo as appo
 import ray.rllib.agents.impala.impala as impala
@@ -20,19 +16,16 @@ from ray.rllib.agents.callbacks import DefaultCallbacks
 from ray.tune.integration.wandb import WandbLoggerCallback
 from ray.rllib.utils.spaces.flexdict import FlexDict
 from ray.rllib.models.torch.recurrent_net import RecurrentNetwork
-
 from neural_mmo.forge.blade.io.action.static import Action, Fixed
 from neural_mmo.forge.blade.io.stimulus.static import Stimulus
 from neural_mmo.forge.blade.lib import overlay
 from neural_mmo.forge.blade.systems import ai
-
 from neural_mmo.forge.ethyr.torch import policy
 from neural_mmo.forge.ethyr.torch.policy import attention
-
 from neural_mmo.forge.trinity import Env
 from neural_mmo.forge.trinity.dataframe import DataType
 from neural_mmo.forge.trinity.overlay import Overlay, OverlayRegistry
-
+from neural_mmo.forge.blade.lib import utils
 
 ###############################################################################
 # Pytorch model + IO. The pip package contains some submodules
@@ -354,8 +347,43 @@ class RLlibEnv(Env, rllib.MultiAgentEnv):
 
         ent.achievements.update(self.realm, ent)
 
+		#Distance to destination reward
+		
+        point4 = (25, 18)
+
+        init_contraband_destination_distance = utils.l2(
+            ent.spawnPos,
+            point4
+        )
+    
+        contraband_destination_distance = utils.l2(
+            ent.pos,
+            point4
+        )
+        
+        if contraband_destination_distance <= 3:
+            contraband_reward = 5000
+        elif contraband_destination_distance <= init_contraband_destination_distance and contraband_destination_distance > 0:
+            contraband_reward = 100*(1/contraband_destination_distance)
+        else:
+            contraband_reward = 0
+        
+        #Penalize for being adjacent to the coast(territorial waters) not near the destination
+        adjmats = [x.tex for x in ai.utils.adjacentMats(self.realm.map.tiles, ent.pos)]
+        
+        if 'grass' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
+            around_coast_penalty = -100*(1- 1/contraband_destination_distance)
+        else:
+            around_coast_penalty = 0.0
+
+        #Penalize for being adjacent to the border not near the destination
+        if 'stone' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
+            around_border_penalty = -100
+        else:
+            around_border_penalty = 0
+
         alpha = config.TEAM_SPIRIT
-        return alpha*team + (1.0-alpha)*individual
+        return alpha*team + (1.0-alpha)*individual + contraband_reward + around_coast_penalty + around_border_penalty
 
     def step(self, decisions, preprocess=None, omitDead=False):
         preprocess = {entID for entID in decisions}

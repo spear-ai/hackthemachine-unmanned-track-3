@@ -9,15 +9,16 @@ import numpy as np
 
 
 def map_to_rewards(tiles, entity) -> List[List[float]]:
-   lava_reward = stone_reward = water_reward = float('-inf')
-   forest_reward = 1.0 + math.pow(
-      (1 - entity.resources.food.val / entity.resources.food.max) * 15.0,
-      1.25)
-   scrub_reward = 1.0
-   around_water_reward = 1.0 + math.pow(
-      (1 - entity.resources.water.val / entity.resources.water.max) * 15.0,
-      1.25)
+   lava_reward = stone_reward = float('-inf')
+   # forest_reward = 1.0 + math.pow(
+   #    (1 - entity.resources.food.val / entity.resources.food.max) * 15.0,
+   #    1.25)
+   # scrub_reward = 1.0
+   # around_water_reward = 1.0 + math.pow(
+   #    (1 - entity.resources.water.val / entity.resources.water.max) * 15.0,
+   #    1.25)
 
+   #around_coast_penalty = -100.0
    reward_matrix = np.full((len(tiles), len(tiles[0])), 0.0)
 
    for line in range(len(tiles)):
@@ -30,19 +31,23 @@ def map_to_rewards(tiles, entity) -> List[List[float]]:
          if tile_val == 'stone':
             reward_matrix[line][column] += stone_reward
 
-         if tile_val == 'forest':
-            reward_matrix[line][column] += forest_reward
+         # if tile_val == 'forest':
+         #    reward_matrix[line][column] += forest_reward
 
-         if tile_val == 'water':
-            reward_matrix[line][column] += water_reward
+         # if tile_val == 'water':
+         #    reward_matrix[line][column] += water_reward
 
          #TODO: Make these comparisons work off of the water Enum type
          #instead of string compare
-         if 'water' in ai.utils.adjacentMats(tiles, (line, column)):
-            reward_matrix[line][column] += around_water_reward
+         # if 'water' in ai.utils.adjacentMats(tiles, (line, column)):
+         #    reward_matrix[line][column] += around_water_reward
 
-         if tile_val == 'scrub':
-            reward_matrix[line][column] += scrub_reward
+         #Penalize for being adjacent to the coast(territorial waters) not near the destination - not working here?
+         # if 'grass' in ai.utils.adjacentMats(tiles, (line, column)):
+#             reward_matrix[line][column] += around_coast_penalty
+
+         # if tile_val == 'scrub':
+         #    reward_matrix[line][column] += scrub_reward
 
    return reward_matrix
 

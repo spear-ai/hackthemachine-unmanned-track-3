@@ -28,8 +28,15 @@ Install Python dependencies:
 
 ```sh
 poetry install
-poetry run python model/server/ray/patch.py
+poetry run python model/ray/patch.py
 ```
+
+## Login to AWS ECR
+
+Run the following command with your {ACCOUNT_ID}:
+
+`aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 763104351884.dkr.ecr.us-east-1.amazonaws.com`
+`aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin {ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com`
 
 # CDK (infrastructure)
 
@@ -52,12 +59,14 @@ them to your `package.json` file and rerun the `yarn install` command.
 
 ## Useful commands
 
-- `yarn cdk ls`          list all stacks in the app
-- `yarn cdk synth`       emits the synthesized CloudFormation template
-- `yarn cdk deploy`      deploy this stack to your default AWS account/region
-- `yarn cdk diff`        compare deployed stack with current state
-- `yarn cdk docs`        open CDK documentation
-- `yarn cdk destroy`     destroy stack
+- `yarn cdk ls`                                         list all stacks in the app
+- `yarn cdk synth`                                      emits the synthesized CloudFormation template
+- `yarn cdk deploy --outputs-file cdk.outputs.json`     deploy this stack to your default AWS account/region
+- `yarn cdk diff`                                       compare deployed stack with current state
+- `yarn cdk docs`                                       open CDK documentation
+- `yarn cdk destroy`                                    destroy stack
+- `yarn sagemaker:algorithm:create`                     create Sagemaker training algorithm
+- `yarn sagemaker:algorithm:describe`                   describe Sagemaker training algorithm
 
 # Model
 
