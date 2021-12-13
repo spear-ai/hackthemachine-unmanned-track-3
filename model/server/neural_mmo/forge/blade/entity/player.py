@@ -12,6 +12,7 @@ from neural_mmo.forge.blade.io.stimulus import Static
 
 class Player(entity.Entity):
    def __init__(self, realm, pos, agent, pop):
+      # changed colors to red and blue via enums
       super().__init__(realm, pos,
             agent.iden, agent.name,
             enums.Red_Blue.colors[pop], pop)

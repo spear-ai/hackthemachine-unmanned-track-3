@@ -66,8 +66,10 @@ them to your `package.json` file and rerun the `yarn install` command.
 - `yarn cdk docs`                                       open CDK documentation
 - `yarn cdk destroy`                                    destroy stack
 - `yarn sagemaker:algorithm:create`                     create Sagemaker training algorithm
-- `yarn sagemaker:algorithm:describe`                   describe Sagemaker training algorithm
+- `yarn sagemaker:algorithm:ydescribe`                   describe Sagemaker training algorithm
 
+
+yarn sagemaker:algorithm:update
 # Model
 
 Add a `.wandb_api_key` to the root of the project.

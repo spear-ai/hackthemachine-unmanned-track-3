@@ -26,7 +26,7 @@ class RLlibConfig:
     RESTORE = None
 
     # Policy specification
-    AGENTS = [Agent, Agent]
+    AGENTS = [Agent, baselines.Combat]
     EVAL_AGENTS = [baselines.Combat, Agent] # Must have multiple different eval agents to work
     #[baselines.Meander, baselines.Forage, baselines.Combat, Agent]
     EVALUATE = True  # Reserved param 
@@ -88,7 +88,7 @@ class PathsConfig:
     PATH_THEME_WEB = os.path.join(PATH_THEMES, 'index_web.html')
     EXPERIMENT_DIR = os.path.join(PATH_ROOT, 'server/experiments')
 
-class DefaultConfig(RLlibConfig, PathsConfig, core.config.Resource, core.config.Config):
+class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
 #class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
     # Various model training settings
     NUM_WORKERS = 1
@@ -169,7 +169,8 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Resource, core.config.
     WANDB_API_KEY_FILE = '.wandb_api_key'
 
 
-class EastPacificOcean(core.config.Achievement, DefaultConfig):
+class EastPacificOcean(core.config.Achievement, core.config.Resource, 
+    core.config.Combat, DefaultConfig):
     # The default map size is 72×72 (excluding the border)
     TERRAIN_CENTER = 96
 
@@ -179,13 +180,16 @@ class EastPacificOcean(core.config.Achievement, DefaultConfig):
     PLAYER_SPAWN_ATTEMPTS = 1
     AGENT_LOADER = core.config.TeamLoader # For team populations to work
     AGENTS = NPOP*[Agent]
-
+    # Visibility radius - Only 7 works :(
+    #NSTIM = 7
+    # Reach of attacks using the Range skill
+    #COMBAT_RANGE_REACH = 20
     COOPERATIVE = True
 
     # Agents run out of food/water and take damage from hunger/thirst.
     # Therefore, increasing their health also increases their range, max ~150
-    BASE_HEALTH = 75  # change range in experience.py
-    RESOURCE_BASE_RESOURCE = 150 # change range in experience.py
+    BASE_HEALTH = 30  # change range in experience.py
+    RESOURCE_BASE_RESOURCE = 30 # change range in experience.py
     # Reward the agent for achievements such as:
     # * Move contraband closer to its destination
     REWARD_ACHIEVEMENT = True
