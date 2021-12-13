@@ -68,8 +68,12 @@ them to your `package.json` file and rerun the `yarn install` command.
 - `yarn sagemaker:algorithm:create`                     create Sagemaker training algorithm
 - `yarn sagemaker:algorithm:ydescribe`                   describe Sagemaker training algorithm
 
+- `yarn sagemaker:algorithm:update`
+  update Sagemaker training algorithm
 
-yarn sagemaker:algorithm:update
+- `yarn cdk deploy --outputs-file cdk.outputs.json && yarn sagemaker:algorithm:update`
+  deploy and update
+  
 # Model
 
 Add a `.wandb_api_key` to the root of the project.

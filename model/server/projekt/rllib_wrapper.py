@@ -392,6 +392,13 @@ class RLlibEnv(Env, rllib.MultiAgentEnv):
                 ent.spawnPos,
                 ent.pos
             )
+
+            #Reward for killing Pangas
+            if ent.history.playerKills > 0:
+                kill_reward = 5000 * ent.history.playerKills
+            else:
+                kill_reward = 0
+
             #Penalize for being adjacent to the coast(territorial waters)
             if 'grass' in adjmats and spawn_distance >= 5:
                 around_coast_penalty = -50
@@ -404,7 +411,7 @@ class RLlibEnv(Env, rllib.MultiAgentEnv):
             else:
                 around_border_penalty = 0.0
             
-            custom = around_coast_penalty + around_border_penalty
+            custom = around_coast_penalty + around_border_penalty + kill_reward
     
         return alpha*team + (1.0-alpha)*individual + custom
         
