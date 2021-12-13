@@ -1,5 +1,6 @@
 import ray
-import pickle5 as pickle
+# import pickle5 as pickle
+import pickle
 from ray.tune.registry import register_env
 from ray.rllib.agents.ppo import PPOTrainer
 import supersuit as ss
