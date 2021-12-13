@@ -49,7 +49,7 @@ export class SagemakerStack extends cdk.Stack {
 
     const sagemakerAlgorithmDockerImage = new cdkEcrAssets.DockerImageAsset(this, 'sagemakerAlgorithmDockerImage', {
       directory: path.join(__dirname, '../..'),
-      file: 'Dockerfile.sagemaker',
+      file: 'Dockerfile.sagemaker.neural-mmo',
     });
 
     const sagemakerEcrRepository = new cdkEcr.Repository(this, 'sagemakerEcrRepository');
