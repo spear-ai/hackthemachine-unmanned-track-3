@@ -5,7 +5,7 @@ class ExperienceCalculator:
    def __init__(self):
       self.exp = [0]
       self.tabulateExp()
-
+   # numLevels changes max health and hunger
    def tabulateExp(self, numLevels=150):
       for i in range(2, numLevels+1):
          increment = np.floor(i-1 + 300*(2**((i-1)/7.0)))/4.0

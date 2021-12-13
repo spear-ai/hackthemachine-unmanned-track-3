@@ -35,6 +35,9 @@ def attack(entity, targ, skillFn):
    dmg = min(dmg, entity.resources.health.val)
    entity.applyDamage(dmg, entitySkill.__class__.__name__.lower())
    targ.receiveDamage(entity, dmg)
+
+   #Temporary high damage
+   dmg = 250
    return dmg
 
 #Compute maximum damage roll

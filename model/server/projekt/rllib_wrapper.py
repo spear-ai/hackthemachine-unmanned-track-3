@@ -346,44 +346,75 @@ class RLlibEnv(Env, rllib.MultiAgentEnv):
             team += SCALE*(post - pre).sum()
 
         ent.achievements.update(self.realm, ent)
-
-		#Distance to destination reward
-		
-        point4 = (25, 18)
-
-        init_contraband_destination_distance = utils.l2(
-            ent.spawnPos,
-            point4
-        )
-    
-        contraband_destination_distance = utils.l2(
-            ent.pos,
-            point4
-        )
-        
-        if contraband_destination_distance <= 3:
-            contraband_reward = 5000
-        elif contraband_destination_distance <= init_contraband_destination_distance and contraband_destination_distance > 0:
-            contraband_reward = 100*(1/contraband_destination_distance)
-        else:
-            contraband_reward = 0
-        
-        #Penalize for being adjacent to the coast(territorial waters) not near the destination
-        adjmats = [x.tex for x in ai.utils.adjacentMats(self.realm.map.tiles, ent.pos)]
-        
-        if 'grass' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
-            around_coast_penalty = -100*(1- 1/contraband_destination_distance)
-        else:
-            around_coast_penalty = 0.0
-
-        #Penalize for being adjacent to the border not near the destination
-        if 'stone' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
-            around_border_penalty = -100
-        else:
-            around_border_penalty = 0
-
         alpha = config.TEAM_SPIRIT
-        return alpha*team + (1.0-alpha)*individual + contraband_reward + around_coast_penalty + around_border_penalty
+
+        # Panga Rewards
+        adjmats = [x.tex for x in ai.utils.adjacentMats(self.realm.map.tiles, ent.pos)]
+        if ent.pop == 0:
+            #Distance to destination reward
+            
+            point4 = (25, 18)
+
+            init_contraband_destination_distance = utils.l2(
+                ent.spawnPos,
+                point4
+            )
+        
+            contraband_destination_distance = utils.l2(
+                ent.pos,
+                point4
+            )
+            
+            if contraband_destination_distance <= 3:
+                contraband_reward = 5000
+            elif contraband_destination_distance <= init_contraband_destination_distance and contraband_destination_distance > 0:
+                contraband_reward = 100*(1/contraband_destination_distance)
+            else:
+                contraband_reward = 0
+            
+            #Penalize for being adjacent to the coast(territorial waters) not near the destination
+            if 'grass' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
+                around_coast_penalty = -100*(1 - 1/contraband_destination_distance)
+            else:
+                around_coast_penalty = 0.0
+
+            #Penalize for being adjacent to the border not near the destination
+            if 'stone' in adjmats and contraband_destination_distance >= 5 and init_contraband_destination_distance >=5:
+                around_border_penalty = -100
+            else:
+                around_border_penalty = 0.0
+
+            custom = contraband_reward + around_coast_penalty + around_border_penalty
+        
+        # Force Package Rewards
+        if ent.pop == 1:
+            spawn_distance = utils.l2(
+                ent.spawnPos,
+                ent.pos
+            )
+
+            #Reward for killing Pangas
+            if ent.history.playerKills > 0:
+                kill_reward = 5000 * ent.history.playerKills
+            else:
+                kill_reward = 0
+
+            #Penalize for being adjacent to the coast(territorial waters)
+            if 'grass' in adjmats and spawn_distance >= 5:
+                around_coast_penalty = -50
+            else:
+                around_coast_penalty = 0.0
+
+            #Penalize for being adjacent to the border
+            if 'stone' in adjmats and spawn_distance >= 5:
+                around_border_penalty = -20
+            else:
+                around_border_penalty = 0.0
+            
+            custom = around_coast_penalty + around_border_penalty + kill_reward
+    
+        return alpha*team + (1.0-alpha)*individual + custom
+        
 
     def step(self, decisions, preprocess=None, omitDead=False):
         preprocess = {entID for entID in decisions}

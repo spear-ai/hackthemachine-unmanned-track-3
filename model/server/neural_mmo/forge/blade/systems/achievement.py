@@ -13,8 +13,8 @@ class Diary:
 
         if config.game_system_enabled('Achievement'):
             self.achievements = [
-                ContrabandDelivered,
-                # PlayerKills,
+                #ContrabandDelivered,
+                PlayerKills,
                 # Equipment,
                 # Exploration,
                 # Foraging
