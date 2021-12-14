@@ -34,7 +34,7 @@ export class SagemakerStack extends cdk.Stack {
 
     new cdkS3Deployment.BucketDeployment(this, 'environmentDataS3Files', {
       destinationBucket: environmentDataS3Bucket,
-      sources: [cdkS3Deployment.Source.asset(path.join(__dirname, '../../model/environment/generated'))],
+      sources: [cdkS3Deployment.Source.asset(path.join(__dirname, '../../model/environment/generated/neural-mmo'))],
     });
 
     environmentDataS3Bucket.grantReadWrite(sagemakerIamRole);

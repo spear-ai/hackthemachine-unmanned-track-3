@@ -107,7 +107,7 @@ class DefaultConfig(RLlibConfig, PathsConfig, core.config.Config):
     # Update path settings
     PATH_ROOT = os.path.normpath(os.path.join(__file__, '../../..'))
     PATH_ENVIRONMENT = os.path.normpath(os.path.join(PATH_ROOT, 'environment'))
-    PATH_ENVIRONMENT_GENERATED = os.path.join(PATH_ENVIRONMENT, 'generated')
+    PATH_ENVIRONMENT_GENERATED = os.path.join(PATH_ENVIRONMENT, 'generated/neural-mmo')
 
     @property
     def PATH_MAPS(self):
