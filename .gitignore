@@ -3,6 +3,7 @@
 .cdk.staging
 .env
 .envrc
+.venv
 .wandb_api_key
 __pycache__
 cdk.out

@@ -16,6 +16,7 @@
   "forwardPorts": [
     8080
   ],
+  "postStartCommand": "yarn install && poetry install",
   "runArgs": [
     "--env-file",
     ".env",
@@ -23,12 +24,14 @@
     "8gb"
   ],
   "settings": {
-    "[python]": {
-      "editor.insertSpaces": true,
-      "editor.tabSize": 4
+    "[json]": {
+      "editor.tabSize": 2
     },
     "editor.formatOnSave": true,
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "python.defaultInterpreterPath": "/root/.pyenv/shims/python",
+    "python.formatting.blackPath": "/usr/local/bin/black",
+    "python.formatting.provider": "black"
   }
 }
