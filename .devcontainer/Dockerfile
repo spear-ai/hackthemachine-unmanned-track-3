@@ -9,9 +9,9 @@ RUN if [[ -z "$vscode" ]] ; then printf "\nERROR: This Dockerfile needs to be bu
 SHELL ["bin/bash", "-l", "-c"]
 
 # Set home directory
-ENV HOME "/root"
+ENV HOME="/root"
 
-# Update apt-get
+# Update/upgrade apt-get
 RUN apt-get update && apt-get upgrade
 
 # Install NVM (node version manager)
@@ -21,27 +21,34 @@ RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | b
 COPY .devcontainer/nvm-autoinstall.sh nvm-autoinstall.sh
 RUN cat nvm-autoinstall.sh >> $HOME/.bashrc && echo '' >> $HOME/.bashrc && rm nvm-autoinstall.sh
 
-# Install Node.js version in .nvmrc
+# Install Node.js
 COPY .nvmrc .nvmrc
 RUN cat .nvmrc | nvm install
 
 # Install Yarn (node package manager)
 RUN npm install -g yarn
 
-# Install Pyenv (python version manager)
-RUN \
-  apt-get install -y python3-venv && \
-  curl -L https://github.com/pyenv/pyenv-installer/raw/master/bin/pyenv-installer | bash
-
-# Setup Pyenv init script
-ENV PATH "$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
+# Install Pyenv (Python version manager)
+ENV PATH="$HOME/.pyenv/bin:$HOME/.pyenv/shims:$PATH"
+RUN curl https://pyenv.run | bash
 COPY .devcontainer/pyenv.sh pyenv.sh
-RUN cat pyenv.sh >> $HOME/.bashrc && echo '' >> $HOME/.bashrc && rm pyenv.sh
+RUN cat pyenv.sh >> $HOME/.bashrc && rm pyenv.sh
 
-# Install Poetry (python package manager)
-RUN \
-  apt-get install -y python3-dev tk-dev && \
-  curl -sSL https://install.python-poetry.org | python3
+# Install Poetry (Python package manager)
+ENV POETRY_VIRTUALENVS_CREATE=false
+RUN apt-get install -y python3-pip && pip install poetry
 
-# Install Pip globally for VSCode extensions
-RUN apt-get install -y python3-pip
+# Install Python build dependencies
+RUN apt-get install -y \
+  build-essential \
+  libbz2-dev \
+  libffi-dev \
+  liblzma-dev \
+  libreadline-dev \
+  libsqlite3-dev \
+  libssl-dev \
+  zlib1g-dev
+
+# Install Python
+COPY .python-version /
+RUN $HOME/.pyenv/bin/pyenv install
